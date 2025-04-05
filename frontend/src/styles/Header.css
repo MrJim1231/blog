@@ -1,0 +1,45 @@
+/* Header.css */
+.header-container {
+  text-align: center;
+  margin-top: 20px;
+}
+
+.header-title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  color: #333;
+}
+
+.description {
+  font-size: 1.2rem;
+  color: #666;
+  margin-top: 10px;
+}
+
+.categories-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.category-button {
+  padding: 10px 20px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  font-size: 14px;
+  font-weight: bold;
+  text-decoration: none;
+  color: #333;
+  transition: background-color 0.3s ease;
+}
+
+.category-button:hover {
+  background-color: #4caf50;
+  color: white;
+}
+
+.category-button:active {
+  background-color: #45a049;
+}
