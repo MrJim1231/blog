@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import '../styles/CategoryPage.css'
 
@@ -39,7 +39,9 @@ const CategoryPage = () => {
         <div key={article.id} className="article-card">
           <img src={`http://localhost/blog/backend/${article.image}`} alt={article.title} className="article-image" />
           <div className="article-content">
-            <h3>{article.title}</h3>
+            <h3>
+              <Link to={`/article/${article.id}`}>{article.title}</Link>
+            </h3>
             <p>{article.content.slice(0, 150)}...</p>
             <p className="article-meta">
               Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
