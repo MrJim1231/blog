@@ -1,0 +1,36 @@
+/* Стили для фиксированного хедера */
+.header {
+  position: fixed; /* фиксируем хедер */
+  top: 0;
+  left: 0;
+  width: 100%; /* обеспечиваем полную ширину экрана */
+  background-color: white;
+  z-index: 1000; /* чтобы хедер был поверх других элементов */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1); /* добавим тень для красоты */
+  padding: 1rem;
+  transition: top 0.3s ease-in-out;
+  /* height: 60px; */
+  box-sizing: border-box; /* учитываем паддинги и границы */
+}
+
+/* Стили для Navbar */
+.navbar-container {
+  width: 100%; /* делаем Navbar такой же ширины, как и хедер */
+  box-sizing: border-box;
+}
+
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  /* padding: 0 5px;  */
+}
+
+/* Отступ для основного контента */
+.main-content {
+  margin-top: 80px; /* задаем отступ, равный высоте хедера */
+  padding: 2rem;
+  background-color: #f9f9f9;
+  box-sizing: border-box;
+}

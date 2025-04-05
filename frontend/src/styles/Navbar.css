@@ -1,7 +1,7 @@
 /* Общие стили */
-.navbar-container {
+/* .navbar-container {
   padding: 1rem;
-}
+} */
 
 .navbar {
   display: flex;
@@ -11,6 +11,13 @@
 
 /* Лого */
 .logo {
+  font-weight: bold;
+  font-size: 1.3rem;
+}
+
+.logo-link {
+  color: #000; /* чёрный цвет */
+  text-decoration: none; /* убрать подчеркивание */
   font-weight: bold;
   font-size: 1.3rem;
 }
