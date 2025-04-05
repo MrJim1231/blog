@@ -1,3 +1,4 @@
+// src/components/Header.jsx
 import { Link } from 'react-router-dom' // Импортируем Link для перехода
 import '../styles/Header.css' // Стили для Header
 
@@ -12,8 +13,9 @@ export default function Header() {
         <Link to="/" className="nav-link">
           Главная
         </Link>
-        {/* Добавим ссылку на страницу категории */}
         <Link to="/category" className="nav-link">
+          {' '}
+          {/* Переход на страницу категорий */}
           Категории
         </Link>
         <Link to="/login" className="nav-link">

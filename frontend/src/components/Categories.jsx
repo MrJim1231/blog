@@ -1,4 +1,5 @@
-import { Link } from 'react-router-dom' // Импортируем Link для перехода
+// src/components/Categories.jsx
+import { Link } from 'react-router-dom' // Для навигации между страницами
 
 const Categories = () => {
   // Массив категорий внутри компонента
@@ -20,7 +21,7 @@ const Categories = () => {
       {categories.map((cat) => (
         <Link
           key={cat}
-          to={`/category/${cat}`} // Переход на страницу категории
+          to={`/category/${cat}`} // Переход на страницу выбранной категории
           className="category-button"
         >
           {cat}
