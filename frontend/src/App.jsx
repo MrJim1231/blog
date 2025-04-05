@@ -6,12 +6,7 @@ import './App.css'
 function App() {
   return (
     <>
-      <header className="header">
-        <Navbar />
-      </header>
-      <main className="main-content">
-        <Home />
-      </main>
+      <Home />
     </>
   )
 }

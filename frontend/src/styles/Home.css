@@ -1,53 +1,91 @@
-.blog-container {
-  min-height: 100vh;
-  background-color: white;
-  padding: 1.5rem 1rem;
-  max-width: 24rem;
+/* Home.css */
+
+/* Обертка для контента */
+.container {
+  padding: 1.5rem;
+  max-width: 1024px;
   margin: 0 auto;
 }
 
-.blog-header {
-  margin-bottom: 1.5rem;
+/* Заголовок */
+.header-title {
+  font-size: 2.25rem; /* 36px */
+  font-weight: 700;
   text-align: center;
 }
 
-.blog-title {
-  font-size: 1.875rem; /* text-3xl */
-  font-weight: bold;
+/* Описание */
+.description {
+  color: #718096;
+  text-align: center;
+  margin: 1rem 0;
 }
 
-.blog-subtitle {
-  color: #6b7280; /* text-gray-500 */
-}
-
-.blog-posts {
+/* Кнопки категорий */
+.categories-container {
   display: flex;
-  flex-direction: column;
   gap: 1rem;
+  justify-content: center;
+  margin: 1.5rem 0;
 }
 
-.blog-card {
+.category-button {
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.category-button.selected {
+  background-color: #48bb78;
+  color: white;
+}
+
+.category-button:hover {
+  background-color: #e2e8f0;
+}
+
+/* Сетка рецептов */
+.recipe-grid {
+  display: grid;
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .recipe-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .recipe-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* Карточка рецепта */
+.recipe-card {
   background-color: white;
   padding: 1rem;
   border-radius: 1rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.post-title {
-  font-size: 1.25rem;
+.recipe-card img {
+  border-radius: 0.5rem;
+  width: 100%;
+  height: 10rem;
+  object-fit: cover;
+}
+
+.recipe-card-title {
+  font-size: 1.125rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.post-description {
-  color: #4b5563; /* text-gray-600 */
-  font-size: 0.875rem;
-}
-
-.read-more {
   margin-top: 0.5rem;
-  display: inline-block;
-  color: #3b82f6; /* text-blue-500 */
+}
+
+.recipe-card-category {
   font-size: 0.875rem;
-  text-decoration: none;
+  color: #6b7280;
 }
