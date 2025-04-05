@@ -15,7 +15,7 @@ const Navbar = () => {
       <nav className="navbar">
         <div className="logo">
           <NavLink to="/" className="logo-link">
-            Мой Блог
+            Guide Life Blog
           </NavLink>
         </div>
 
