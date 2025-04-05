@@ -1,29 +1,40 @@
-/* src/styles/Categories.css */
 .categories-container {
   display: flex;
-  flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку */
-  justify-content: center; /* Центрируем элементы по горизонтали */
-  gap: 15px; /* Промежуток между элементами */
+  flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
+  gap: 20px; /* Добавляем промежуток между карточками */
+  /* justify-content: space-between;  */
   padding: 20px;
 }
 
 .category-button {
+  display: block;
+  width: calc(25% - 15px); /* Устанавливаем ширину каждой карточки в 25%, с учетом промежутка между карточками */
+  text-align: center;
   text-decoration: none;
-  background-color: #4caf50; /* Зеленый фон для кнопок */
-  color: white; /* Белый цвет текста */
-  font-size: 1.1rem;
-  font-weight: 600;
-  padding: 10px 20px;
-  border-radius: 5px; /* Закругленные углы */
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
-  transition: background-color 0.3s, transform 0.3s; /* Плавные эффекты */
+  color: inherit;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  padding: 10px;
+  box-sizing: border-box;
+  transition: transform 0.3s ease-in-out;
 }
 
 .category-button:hover {
-  background-color: #45a049; /* Тёмно-зеленый цвет при наведении */
-  transform: translateY(-3px); /* Поднимаем кнопку при наведении */
+  transform: translateY(-5px); /* Поднимаем карточку при наведении */
 }
 
-.category-button:active {
-  transform: translateY(0); /* Возвращаем в исходное положение при нажатии */
+.category-image {
+  width: 100%;
+  height: 150px;
+  object-fit: cover; /* Заполняем картинку, сохраняя пропорции */
+  border-radius: 8px;
+}
+
+.category-button span {
+  display: block;
+  margin-top: 10px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #333;
 }
