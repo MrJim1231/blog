@@ -1,65 +1,54 @@
 import { useParams } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
+import '../styles/CategoryPage.css'
 
-// Сопоставление категорий с их ID
-const categoryNamesToIds = {
-  'Кино и сериалы': 15,
-  Завтраки: 1,
-  Ужины: 2,
-  // Добавьте другие категории и их ID
-}
-
-export default function CategoryPage() {
-  const { category } = useParams() // Получаем название категории из URL
+const CategoryPage = () => {
+  const { category } = useParams() // category = ID категории
   const [articles, setArticles] = useState([])
-  const [message, setMessage] = useState('')
-
-  // Преобразуем название категории в ID
-  const categoryId = categoryNamesToIds[category]
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (categoryId) {
-      const fetchArticles = async () => {
-        try {
-          const response = await fetch(`http://localhost/blog/backend/api/get_articles.php?category=${categoryId}`)
-          const data = await response.json()
+    const fetchArticles = async () => {
+      try {
+        const response = await fetch(`http://localhost/blog/backend/api/get_articles.php?category=${category}`)
+        const data = await response.json()
 
-          if (data.message) {
-            setMessage(data.message)
-          } else {
-            setArticles(data)
-          }
-        } catch (error) {
-          setMessage('Ошибка при загрузке статей')
+        if (Array.isArray(data)) {
+          setArticles(data)
+        } else {
+          setError(data.message || 'Неизвестная ошибка')
         }
+      } catch (err) {
+        setError('Ошибка загрузки статей')
+      } finally {
+        setLoading(false)
       }
-
-      fetchArticles()
-    } else {
-      setMessage('Категория не найдена')
     }
-  }, [categoryId]) // Перезапускаем запрос, если категория изменится
+
+    fetchArticles()
+  }, [category])
+
+  if (loading) return <div>Загрузка статей...</div>
+  if (error) return <div className="error-message">{error}</div>
 
   return (
-    <div className="container">
-      <h1 className="header-title">Категория: {category}</h1>
-
-      {message && <p>{message}</p>}
-
-      <div className="recipe-grid">
-        {articles.length > 0 ? (
-          articles.map((article) => (
-            <div key={article.id} className="recipe-card">
-              <img src={`http://localhost/blog/${article.image}`} alt={article.title} />
-              <h3 className="recipe-card-title">{article.title}</h3>
-              <p className="recipe-card-category">{article.category_name}</p>
-              <p>{article.content}</p>
-            </div>
-          ))
-        ) : (
-          <p>Статьи в этой категории не найдены.</p>
-        )}
-      </div>
+    <div className="articles-container">
+      <h2>Статьи</h2>
+      {articles.map((article) => (
+        <div key={article.id} className="article-card">
+          <img src={`http://localhost/blog/backend/${article.image}`} alt={article.title} className="article-image" />
+          <div className="article-content">
+            <h3>{article.title}</h3>
+            <p>{article.content.slice(0, 150)}...</p>
+            <p className="article-meta">
+              Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
+            </p>
+          </div>
+        </div>
+      ))}
     </div>
   )
 }
+
+export default CategoryPage

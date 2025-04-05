@@ -48,7 +48,7 @@ const Categories = () => {
     <div className="categories-container">
       {categories.map((cat) => (
         <div key={cat.id} className="category-item">
-          <Link to={`/category/${cat.name}`} className="category-button">
+          <Link to={`/category/${cat.id}`} className="category-button">
             <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className="category-image" />
             <span>{cat.name}</span>
           </Link>
