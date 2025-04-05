@@ -161,3 +161,31 @@
     grid-template-columns: 1fr;
   }
 }
+
+/* Контейнер для кнопок действий (редактировать и удалить) */
+.category-actions {
+  display: flex;
+  justify-content: center;
+  gap: 10px; /* Отступ между кнопками */
+  margin-top: 10px;
+}
+
+/* Кнопка редактирования */
+.edit-category-button {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s;
+}
+
+.edit-category-button:hover {
+  background-color: #0056b3;
+}
+
+.edit-category-button:active {
+  background-color: #00408a;
+}

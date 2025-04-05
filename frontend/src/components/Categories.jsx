@@ -95,19 +95,26 @@ const Categories = () => {
             <span>{cat.name}</span>
           </Link>
 
-          <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
-          <button onClick={() => handleEditClick(cat)}>Редактировать</button>
+          <div className="category-actions">
+            <button className="edit-category-button" onClick={() => handleEditClick(cat)}>
+              Редактировать
+            </button>
+            <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
+          </div>
         </div>
       ))}
 
       {editingCategory && (
-        <div className="edit-modal">
-          <h3>Редактировать категорию</h3>
-          <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} placeholder="Название" />
-          <input type="file" onChange={handleFileChange} />
-          <button onClick={handleSaveEdit}>Сохранить</button>
-          <button onClick={() => setEditingCategory(null)}>Отмена</button>
-        </div>
+        <>
+          <div className="modal-overlay" onClick={() => setEditingCategory(null)} />
+          <div className="edit-modal">
+            <h3>Редактировать категорию</h3>
+            <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} placeholder="Название" />
+            <input type="file" onChange={handleFileChange} />
+            <button onClick={handleSaveEdit}>Сохранить</button>
+            <button onClick={() => setEditingCategory(null)}>Отмена</button>
+          </div>
+        </>
       )}
     </div>
   )
