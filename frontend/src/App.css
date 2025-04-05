@@ -28,9 +28,7 @@
 }
 
 /* Отступ для основного контента */
-.main-content {
-  margin-top: 80px; /* задаем отступ, равный высоте хедера */
-  padding: 2rem;
-  background-color: #f9f9f9;
-  box-sizing: border-box;
+.content {
+  padding-top: 100px; /* чтобы не перекрывал Navbar */
+  min-height: calc(100vh - 100px); /* чтобы контент занимал почти весь экран */
 }
