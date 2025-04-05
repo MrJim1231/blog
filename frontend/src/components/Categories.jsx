@@ -1,21 +1,25 @@
-import { Link } from 'react-router-dom' // Для навигации между страницами
-import '../styles/Categories.css' // Импортируем стили для категорий
-import { useEffect, useState } from 'react' // Импортируем хук для работы с состоянием
-import DeleteCategory from './DeleteCategory' // Импортируем компоненту удаления категории
+import { Link } from 'react-router-dom'
+import '../styles/Categories.css'
+import { useEffect, useState } from 'react'
+import DeleteCategory from './DeleteCategory'
 
 const Categories = () => {
-  const [categories, setCategories] = useState([]) // Состояние для хранения категорий
-  const [loading, setLoading] = useState(true) // Состояние для отслеживания загрузки данных
+  const [categories, setCategories] = useState([])
+  const [loading, setLoading] = useState(true)
+
+  // Для редактирования
+  const [editingCategory, setEditingCategory] = useState(null)
+  const [editedName, setEditedName] = useState('')
+  const [editedImage, setEditedImage] = useState('')
 
   useEffect(() => {
-    // Функция для получения категорий с сервера
     const fetchCategories = async () => {
       try {
-        const response = await fetch('http://localhost/blog/backend/api/get_categories.php') // Замените на правильный путь
+        const response = await fetch('http://localhost/blog/backend/api/get_categories.php')
         const data = await response.json()
 
         if (data.length > 0) {
-          setCategories(data) // Сохраняем полный список категорий с изображениями
+          setCategories(data)
         } else {
           console.error('Нет категорий')
         }
@@ -26,16 +30,47 @@ const Categories = () => {
       }
     }
 
-    fetchCategories() // Запускаем запрос
+    fetchCategories()
   }, [])
 
   const handleDeleteCategory = (id) => {
-    // Функция для удаления категории из локального состояния
     setCategories(categories.filter((cat) => cat.id !== id))
   }
 
+  const handleEditClick = (category) => {
+    setEditingCategory(category)
+    setEditedName(category.name)
+    setEditedImage(category.image)
+  }
+
+  const handleSaveEdit = async () => {
+    try {
+      const response = await fetch('http://localhost/blog/backend/api/edit_category.php', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id: editingCategory.id,
+          name: editedName,
+          image: editedImage,
+        }),
+      })
+
+      const data = await response.json()
+      console.log(data)
+
+      // Обновим локальный список
+      setCategories(categories.map((cat) => (cat.id === editingCategory.id ? { ...cat, name: editedName, image: editedImage } : cat)))
+
+      setEditingCategory(null)
+    } catch (error) {
+      console.error('Ошибка при обновлении категории:', error)
+    }
+  }
+
   if (loading) {
-    return <div>Загрузка...</div> // Пока данные загружаются
+    return <div>Загрузка...</div>
   }
 
   return (
@@ -47,10 +82,22 @@ const Categories = () => {
             <span>{cat.name}</span>
           </Link>
 
-          {/* Кнопка для удаления категории */}
           <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
+
+          {/* Кнопка редактирования */}
+          <button onClick={() => handleEditClick(cat)}>Редактировать</button>
         </div>
       ))}
+
+      {editingCategory && (
+        <div className="edit-modal">
+          <h3>Редактировать категорию</h3>
+          <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} placeholder="Название" />
+          <input type="text" value={editedImage} onChange={(e) => setEditedImage(e.target.value)} placeholder="URL изображения" />
+          <button onClick={handleSaveEdit}>Сохранить</button>
+          <button onClick={() => setEditingCategory(null)}>Отмена</button>
+        </div>
+      )}
     </div>
   )
 }
