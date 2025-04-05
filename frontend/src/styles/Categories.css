@@ -1,40 +1,68 @@
+/* Контейнер для всех категорий */
 .categories-container {
-  display: flex;
-  flex-wrap: wrap; /* Разрешаем перенос элементов на новую строку */
-  gap: 20px; /* Добавляем промежуток между карточками */
-  /* justify-content: space-between;  */
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* 4 колонки */
+  gap: 20px; /* Отступ между элементами */
   padding: 20px;
+  justify-items: center; /* Выравнивание элементов по центру */
 }
 
+/* Стиль для каждого элемента категории */
+.category-item {
+  background-color: #f9f9f9;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.category-item:hover {
+  transform: scale(1.05); /* Увеличиваем размер при наведении */
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Картинка категории */
+.category-image {
+  max-width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+/* Текст категории */
 .category-button {
   display: block;
-  width: calc(25% - 15px); /* Устанавливаем ширину каждой карточки в 25%, с учетом промежутка между карточками */
-  text-align: center;
+  font-size: 18px;
+  font-weight: 600;
+  color: #333;
   text-decoration: none;
-  color: inherit;
-  border-radius: 8px;
-  background-color: #f9f9f9;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  padding: 10px;
-  box-sizing: border-box;
-  transition: transform 0.3s ease-in-out;
+  margin-bottom: 10px;
+  transition: color 0.3s;
 }
 
 .category-button:hover {
-  transform: translateY(-5px); /* Поднимаем карточку при наведении */
+  color: #007bff; /* Цвет при наведении */
 }
 
-.category-image {
-  width: 100%;
-  height: 150px;
-  object-fit: cover; /* Заполняем картинку, сохраняя пропорции */
-  border-radius: 8px;
-}
-
-.category-button span {
-  display: block;
+/* Кнопка удаления категории */
+.delete-category-button {
+  background-color: #ff4d4d;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
   margin-top: 10px;
-  font-size: 16px;
-  font-weight: bold;
-  color: #333;
+  transition: background-color 0.3s;
+}
+
+.delete-category-button:hover {
+  background-color: #ff1a1a; /* Цвет при наведении */
+}
+
+.delete-category-button:active {
+  background-color: #e60000; /* Цвет при клике */
 }

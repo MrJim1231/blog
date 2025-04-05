@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom' // Для навигации между страницами
 import '../styles/Categories.css' // Импортируем стили для категорий
 import { useEffect, useState } from 'react' // Импортируем хук для работы с состоянием
+import DeleteCategory from './DeleteCategory' // Импортируем компоненту удаления категории
 
 const Categories = () => {
   const [categories, setCategories] = useState([]) // Состояние для хранения категорий
@@ -28,6 +29,11 @@ const Categories = () => {
     fetchCategories() // Запускаем запрос
   }, [])
 
+  const handleDeleteCategory = (id) => {
+    // Функция для удаления категории из локального состояния
+    setCategories(categories.filter((cat) => cat.id !== id))
+  }
+
   if (loading) {
     return <div>Загрузка...</div> // Пока данные загружаются
   }
@@ -35,14 +41,15 @@ const Categories = () => {
   return (
     <div className="categories-container">
       {categories.map((cat) => (
-        <Link
-          key={cat.name}
-          to={`/category/${cat.name}`} // Переход на страницу выбранной категории
-          className="category-button"
-        >
-          <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className="category-image" />
-          <span>{cat.name}</span>
-        </Link>
+        <div key={cat.id} className="category-item">
+          <Link to={`/category/${cat.name}`} className="category-button">
+            <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className="category-image" />
+            <span>{cat.name}</span>
+          </Link>
+
+          {/* Кнопка для удаления категории */}
+          <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
+        </div>
       ))}
     </div>
   )
