@@ -1,5 +1,5 @@
-// src/components/Categories.jsx
 import { Link } from 'react-router-dom' // Для навигации между страницами
+import '../styles/Categories.css' // Импортируем стили для категорий
 
 const Categories = () => {
   // Массив категорий внутри компонента

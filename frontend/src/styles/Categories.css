@@ -1,0 +1,29 @@
+/* src/styles/Categories.css */
+.categories-container {
+  display: flex;
+  flex-wrap: wrap; /* Позволяет элементам переноситься на новую строку */
+  justify-content: center; /* Центрируем элементы по горизонтали */
+  gap: 15px; /* Промежуток между элементами */
+  padding: 20px;
+}
+
+.category-button {
+  text-decoration: none;
+  background-color: #4caf50; /* Зеленый фон для кнопок */
+  color: white; /* Белый цвет текста */
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 10px 20px;
+  border-radius: 5px; /* Закругленные углы */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Легкая тень */
+  transition: background-color 0.3s, transform 0.3s; /* Плавные эффекты */
+}
+
+.category-button:hover {
+  background-color: #45a049; /* Тёмно-зеленый цвет при наведении */
+  transform: translateY(-3px); /* Поднимаем кнопку при наведении */
+}
+
+.category-button:active {
+  transform: translateY(0); /* Возвращаем в исходное положение при нажатии */
+}
