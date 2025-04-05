@@ -3,10 +3,17 @@
 require_once __DIR__ . '/../config.php'; // Подключаем конфиг
 
 // Создаем подключение с использованием данных из конфига
-$conn = new mysqli(DB_HOSTNAME, DB_USERNAME, DB_PASSWORD, DB_DATABASE);
-
-// Проверка на ошибки подключения
-if ($conn->connect_error) {
-    die(json_encode(["error" => "Ошибка подключения: " . $conn->connect_error]));
+try {
+    $pdo = new PDO(
+        "mysql:host=" . DB_HOSTNAME . ";dbname=" . DB_DATABASE . ";charset=utf8",
+        DB_USERNAME,
+        DB_PASSWORD,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
+        ]
+    );
+} catch (PDOException $e) {
+    echo json_encode(['message' => 'Ошибка подключения к базе данных: ' . $e->getMessage()]);
+    exit;
 }
 ?>

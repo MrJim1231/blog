@@ -11,23 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
     exit;
 }
 
-// Подключаем конфиг базы данных
+// Подключаем базу данных
 require_once __DIR__ . '/../includes/db.php'; // Убедись, что путь правильный
-
-// Подключение к базе данных через PDO
-try {
-    $pdo = new PDO(
-        "mysql:host=" . DB_HOSTNAME . ";dbname=" . DB_DATABASE . ";charset=utf8",
-        DB_USERNAME,
-        DB_PASSWORD,
-        [
-            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION
-        ]
-    );
-} catch (PDOException $e) {
-    echo json_encode(['message' => 'Ошибка подключения к базе данных: ' . $e->getMessage()]);
-    exit;
-}
 
 // Получаем данные из POST-запроса
 $category = $_POST['category'] ?? '';
@@ -55,29 +40,46 @@ if ($count > 0) {
 // Обрабатываем изображение (если оно было загружено)
 $imagePath = null;
 if ($image && $image['error'] === UPLOAD_ERR_OK) {
-    // Директория для загрузки изображений
-    $uploadDir = __DIR__ . '/../uploads/';
-    $imageName = basename($image['name']);
-    $imagePath = 'uploads/' . $imageName; // Путь для базы данных будет относительным
+    // Логируем информацию о типе файла
+    error_log('Тип изображения: ' . $image['type']);
+    
+    // Проверяем MIME-тип изображения
+    $imageType = mime_content_type($image['tmp_name']);
+    error_log('MIME-тип изображения: ' . $imageType);
 
-    // Проверяем тип файла (например, разрешаем только изображения PNG и JPG)
     $allowedTypes = ['image/jpeg', 'image/png'];
-    if (!in_array($image['type'], $allowedTypes)) {
+    if (!in_array($imageType, $allowedTypes)) {
+        error_log('Неверный MIME-тип изображения: ' . $imageType);
         echo json_encode(['message' => 'Неверный тип изображения']);
         exit;
     }
 
-    // Ограничиваем размер файла (например, 2MB)
-    if ($image['size'] > 2 * 1024 * 1024) {
-        echo json_encode(['message' => 'Размер изображения слишком большой']);
+    // Директория для загрузки изображений
+    $uploadDir = __DIR__ . '/../uploads/';
+    $imageName = pathinfo($image['name'], PATHINFO_FILENAME) . '.webp'; // Сохраняем файл как .webp
+    $imagePath = 'uploads/' . $imageName; // Путь для базы данных будет относительным
+
+    // Загружаем изображение с помощью GD библиотеки
+    switch ($imageType) {
+        case 'image/jpeg':
+            $img = imagecreatefromjpeg($image['tmp_name']);
+            break;
+        case 'image/png':
+            $img = imagecreatefrompng($image['tmp_name']);
+            break;
+        default:
+            echo json_encode(['message' => 'Неверный формат изображения']);
+            exit;
+    }
+
+    // Сохраняем изображение в формате WebP
+    if (!imagewebp($img, $uploadDir . $imageName)) {
+        echo json_encode(['message' => 'Ошибка при сохранении изображения в формате WebP']);
         exit;
     }
 
-    // Перемещаем файл в нужную папку
-    if (!move_uploaded_file($image['tmp_name'], $uploadDir . $imageName)) {
-        echo json_encode(['message' => 'Ошибка при загрузке изображения']);
-        exit;
-    }
+    // Освобождаем память
+    imagedestroy($img);
 }
 
 // Вставляем новую категорию в базу данных
