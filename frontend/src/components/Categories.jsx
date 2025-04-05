@@ -7,10 +7,9 @@ const Categories = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
 
-  // Для редактирования
   const [editingCategory, setEditingCategory] = useState(null)
   const [editedName, setEditedName] = useState('')
-  const [editedImage, setEditedImage] = useState('')
+  const [editedFile, setEditedFile] = useState(null)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -40,30 +39,44 @@ const Categories = () => {
   const handleEditClick = (category) => {
     setEditingCategory(category)
     setEditedName(category.name)
-    setEditedImage(category.image)
+    setEditedFile(null)
+  }
+
+  const handleFileChange = (e) => {
+    setEditedFile(e.target.files[0])
   }
 
   const handleSaveEdit = async () => {
+    const formData = new FormData()
+    formData.append('id', editingCategory.id)
+    formData.append('name', editedName)
+    if (editedFile) {
+      formData.append('image', editedFile)
+    }
+
     try {
       const response = await fetch('http://localhost/blog/backend/api/edit_category.php', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          id: editingCategory.id,
-          name: editedName,
-          image: editedImage,
-        }),
+        method: 'POST',
+        body: formData,
       })
 
       const data = await response.json()
       console.log(data)
 
-      // Обновим локальный список
-      setCategories(categories.map((cat) => (cat.id === editingCategory.id ? { ...cat, name: editedName, image: editedImage } : cat)))
+      setCategories(
+        categories.map((cat) =>
+          cat.id === editingCategory.id
+            ? {
+                ...cat,
+                name: editedName,
+                image: data.image || cat.image,
+              }
+            : cat
+        )
+      )
 
       setEditingCategory(null)
+      setEditedFile(null)
     } catch (error) {
       console.error('Ошибка при обновлении категории:', error)
     }
@@ -83,8 +96,6 @@ const Categories = () => {
           </Link>
 
           <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
-
-          {/* Кнопка редактирования */}
           <button onClick={() => handleEditClick(cat)}>Редактировать</button>
         </div>
       ))}
@@ -93,7 +104,7 @@ const Categories = () => {
         <div className="edit-modal">
           <h3>Редактировать категорию</h3>
           <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} placeholder="Название" />
-          <input type="text" value={editedImage} onChange={(e) => setEditedImage(e.target.value)} placeholder="URL изображения" />
+          <input type="file" onChange={handleFileChange} />
           <button onClick={handleSaveEdit}>Сохранить</button>
           <button onClick={() => setEditingCategory(null)}>Отмена</button>
         </div>
