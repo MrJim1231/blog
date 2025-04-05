@@ -3,7 +3,8 @@ import Home from './pages/Home'
 import CategoryPage from './pages/CategoryPage'
 import Header from './components/Header'
 import Categories from './components/Categories'
-import './App.css' // если ты используешь внешние стили, добавь этот импорт
+import AdminPanel from './components/AdminPanel' // <-- добавили импорт
+import './App.css'
 
 function App() {
   return (
@@ -14,6 +15,7 @@ function App() {
           <Route path="/" element={<Home />} />
           <Route path="/category" element={<Categories />} />
           <Route path="/category/:category" element={<CategoryPage />} />
+          <Route path="/admin" element={<AdminPanel />} /> {/* <-- добавили маршрут */}
         </Routes>
       </div>
     </>
