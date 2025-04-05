@@ -18,10 +18,11 @@ require_once __DIR__ . '/../includes/db.php';
 $title = $_POST['title'] ?? '';
 $content = $_POST['content'] ?? '';
 $category_id = $_POST['category_id'] ?? null;
+$category_name = $_POST['category_name'] ?? '';
 $image = $_FILES['image'] ?? null;
 
 // Валидация
-if (empty($title) || empty($content) || empty($category_id)) {
+if (empty($title) || empty($content) || empty($category_id) || empty($category_name)) {
     echo json_encode(['message' => 'Все поля обязательны']);
     exit;
 }
@@ -64,13 +65,14 @@ if ($image && $image['error'] === UPLOAD_ERR_OK) {
 // Добавление статьи в базу
 try {
     $stmt = $pdo->prepare("
-        INSERT INTO articles (title, content, category_id, image, created_at)
-        VALUES (:title, :content, :category_id, :image, NOW())
+        INSERT INTO articles (title, content, category_id, category_name, image, created_at)
+        VALUES (:title, :content, :category_id, :category_name, :image, NOW())
     ");
     $stmt->execute([
         'title' => $title,
         'content' => $content,
         'category_id' => $category_id,
+        'category_name' => $category_name,
         'image' => $imagePath
     ]);
 

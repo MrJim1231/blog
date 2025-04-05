@@ -14,3 +14,5 @@ CREATE TABLE `articles` (
 `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
 FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+ALTER TABLE articles ADD COLUMN category_name VARCHAR(255) NOT NULL AFTER category_id;

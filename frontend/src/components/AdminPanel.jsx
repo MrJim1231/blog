@@ -95,7 +95,14 @@ export default function AdminPanel() {
     const formData = new FormData()
     formData.append('title', articleTitle)
     formData.append('content', articleContent)
-    formData.append('category_id', articleCategory)
+    formData.append('category_id', articleCategory) // ID категории
+
+    // Получаем имя категории по id
+    const selectedCategory = categories.find((cat) => cat.id === parseInt(articleCategory)) // Получаем выбранную категорию
+    if (selectedCategory) {
+      formData.append('category_name', selectedCategory.name) // Имя категории
+    }
+
     if (articleFile) {
       formData.append('image', articleFile) // Добавляем файл изображения статьи
     }
