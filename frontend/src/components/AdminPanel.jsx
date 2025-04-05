@@ -2,12 +2,20 @@ import { useState } from 'react'
 import '../styles/AdminPanel.css'
 
 export default function AdminPanel() {
-  const [category, setCategory] = useState('')
+  const [category, setCategory] = useState('') // Название категории
   const [imageFile, setImageFile] = useState(null) // Для хранения выбранного файла
-  const [message, setMessage] = useState('')
+  const [message, setMessage] = useState('') // Для отображения сообщения об ошибке или успехе
+  const [categoryImage, setCategoryImage] = useState('') // Для хранения URL изображения после отправки
 
   const handleImageChange = (e) => {
     setImageFile(e.target.files[0]) // Получаем выбранный файл
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setCategoryImage(reader.result) // Устанавливаем изображение для предпросмотра
+    }
+    if (e.target.files[0]) {
+      reader.readAsDataURL(e.target.files[0])
+    }
   }
 
   const handleSubmit = async (e) => {
@@ -37,6 +45,7 @@ export default function AdminPanel() {
       setMessage(result.message)
       setCategory('') // очищаем поле
       setImageFile(null) // очищаем выбранный файл
+      setCategoryImage('') // очищаем предпросмотр изображения
     } catch (error) {
       setMessage('Ошибка при отправке запроса')
     }
@@ -55,6 +64,15 @@ export default function AdminPanel() {
         <button type="submit">Добавить</button>
       </form>
       {message && <p className="message">{message}</p>}
+
+      {/* Предпросмотр изображения */}
+      {categoryImage && (
+        <div className="category-preview">
+          <h3>Предпросмотр</h3>
+          <img src={categoryImage} alt="Preview" className="preview-image" />
+          <p>{category}</p>
+        </div>
+      )}
     </div>
   )
 }

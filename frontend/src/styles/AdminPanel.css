@@ -1,0 +1,46 @@
+.admin-panel {
+  padding: 20px;
+}
+
+input {
+  margin-bottom: 10px;
+  padding: 10px;
+  font-size: 16px;
+}
+
+button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+.message {
+  margin-top: 10px;
+  font-size: 16px;
+  color: #ff0000;
+}
+
+.category-preview {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.preview-image {
+  max-width: 200px;
+  max-height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.category-preview p {
+  font-size: 18px;
+  font-weight: bold;
+  margin-top: 10px;
+}
