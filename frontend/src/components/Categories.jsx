@@ -2,14 +2,12 @@ import { Link } from 'react-router-dom'
 import '../styles/Categories.css'
 import { useEffect, useState } from 'react'
 import DeleteCategory from './DeleteCategory'
+import EditCategoryModal from './EditCategoryModal'
 
 const Categories = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
-
   const [editingCategory, setEditingCategory] = useState(null)
-  const [editedName, setEditedName] = useState('')
-  const [editedFile, setEditedFile] = useState(null)
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -38,53 +36,13 @@ const Categories = () => {
 
   const handleEditClick = (category) => {
     setEditingCategory(category)
-    setEditedName(category.name)
-    setEditedFile(null)
   }
 
-  const handleFileChange = (e) => {
-    setEditedFile(e.target.files[0])
+  const handleSaveEdit = (updatedCategory) => {
+    setCategories(categories.map((cat) => (cat.id === updatedCategory.id ? updatedCategory : cat)))
   }
 
-  const handleSaveEdit = async () => {
-    const formData = new FormData()
-    formData.append('id', editingCategory.id)
-    formData.append('name', editedName)
-    if (editedFile) {
-      formData.append('image', editedFile)
-    }
-
-    try {
-      const response = await fetch('http://localhost/blog/backend/api/edit_category.php', {
-        method: 'POST',
-        body: formData,
-      })
-
-      const data = await response.json()
-      console.log(data)
-
-      setCategories(
-        categories.map((cat) =>
-          cat.id === editingCategory.id
-            ? {
-                ...cat,
-                name: editedName,
-                image: data.image || cat.image,
-              }
-            : cat
-        )
-      )
-
-      setEditingCategory(null)
-      setEditedFile(null)
-    } catch (error) {
-      console.error('Ошибка при обновлении категории:', error)
-    }
-  }
-
-  if (loading) {
-    return <div>Загрузка...</div>
-  }
+  if (loading) return <div>Загрузка...</div>
 
   return (
     <div className="categories-container">
@@ -104,18 +62,7 @@ const Categories = () => {
         </div>
       ))}
 
-      {editingCategory && (
-        <>
-          <div className="modal-overlay" onClick={() => setEditingCategory(null)} />
-          <div className="edit-modal">
-            <h3>Редактировать категорию</h3>
-            <input type="text" value={editedName} onChange={(e) => setEditedName(e.target.value)} placeholder="Название" />
-            <input type="file" onChange={handleFileChange} />
-            <button onClick={handleSaveEdit}>Сохранить</button>
-            <button onClick={() => setEditingCategory(null)}>Отмена</button>
-          </div>
-        </>
-      )}
+      {editingCategory && <EditCategoryModal category={editingCategory} onClose={() => setEditingCategory(null)} onSave={handleSaveEdit} />}
     </div>
   )
 }
