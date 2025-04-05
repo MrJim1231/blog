@@ -30,11 +30,15 @@ try {
 }
 
 // Получаем данные из POST-запроса
-$data = json_decode(file_get_contents("php://input"), true);
-$category = trim($data['category'] ?? '');
+$category = $_POST['category'] ?? '';
+$image = $_FILES['image'] ?? null;
+
+// Логирование данных, чтобы убедиться, что они приходят
+error_log('Категория: ' . $category);
+error_log('Файл изображения: ' . print_r($image, true));
 
 if (empty($category)) {
-    echo json_encode(['message' => 'Категория не может быть пустой']);
+    echo json_encode(['message' => 'Категория не передана']);
     exit;
 }
 
@@ -48,11 +52,39 @@ if ($count > 0) {
     exit;
 }
 
+// Обрабатываем изображение (если оно было загружено)
+$imagePath = null;
+if ($image && $image['error'] === UPLOAD_ERR_OK) {
+    $uploadDir = __DIR__ . '/../uploads/';
+    $imageName = basename($image['name']);
+    $imagePath = $uploadDir . $imageName;
+
+    // Проверяем тип файла (например, разрешаем только изображения PNG и JPG)
+    $allowedTypes = ['image/jpeg', 'image/png'];
+    if (!in_array($image['type'], $allowedTypes)) {
+        echo json_encode(['message' => 'Неверный тип изображения']);
+        exit;
+    }
+
+    // Ограничиваем размер файла (например, 2MB)
+    if ($image['size'] > 2 * 1024 * 1024) {
+        echo json_encode(['message' => 'Размер изображения слишком большой']);
+        exit;
+    }
+
+    // Перемещаем файл в нужную папку
+    if (!move_uploaded_file($image['tmp_name'], $imagePath)) {
+        echo json_encode(['message' => 'Ошибка при загрузке изображения']);
+        exit;
+    }
+}
+
 // Вставляем новую категорию в базу данных
 try {
-    $stmt = $pdo->prepare("INSERT INTO categories (name) VALUES (:category)");
-    $stmt->execute(['category' => $category]);
+    $stmt = $pdo->prepare("INSERT INTO categories (name, image) VALUES (:category, :image)");
+    $stmt->execute(['category' => $category, 'image' => $imagePath]);
     echo json_encode(['message' => 'Категория успешно добавлена']);
 } catch (PDOException $e) {
     echo json_encode(['message' => 'Ошибка при добавлении категории: ' . $e->getMessage()]);
 }
+?>
