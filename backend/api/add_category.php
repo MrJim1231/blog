@@ -56,8 +56,10 @@ if ($image && $image['error'] === UPLOAD_ERR_OK) {
 
     // Директория для загрузки изображений
     $uploadDir = __DIR__ . '/../uploads/';
-    $imageName = pathinfo($image['name'], PATHINFO_FILENAME) . '.webp'; // Сохраняем файл как .webp
-    $imagePath = 'uploads/' . $imageName; // Путь для базы данных будет относительным
+    
+    // Автогенерация имени файла (используем уникальный ID)
+    $uniqueName = uniqid('img_', true) . '.webp';  // Генерируем уникальное имя файла
+    $imagePath = 'uploads/' . $uniqueName; // Путь для базы данных будет относительным
 
     // Загружаем изображение с помощью GD библиотеки
     switch ($imageType) {
@@ -73,7 +75,7 @@ if ($image && $image['error'] === UPLOAD_ERR_OK) {
     }
 
     // Сохраняем изображение в формате WebP
-    if (!imagewebp($img, $uploadDir . $imageName)) {
+    if (!imagewebp($img, $uploadDir . $uniqueName)) {
         echo json_encode(['message' => 'Ошибка при сохранении изображения в формате WebP']);
         exit;
     }

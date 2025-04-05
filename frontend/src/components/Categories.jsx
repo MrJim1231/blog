@@ -1,30 +1,47 @@
 import { Link } from 'react-router-dom' // Для навигации между страницами
 import '../styles/Categories.css' // Импортируем стили для категорий
+import { useEffect, useState } from 'react' // Импортируем хук для работы с состоянием
 
 const Categories = () => {
-  // Массив категорий внутри компонента
-  const categories = [
-    'Подарки',
-    'Кино и сериалы',
-    'Прогулки и досуг',
-    'Путешествия',
-    'Кулинария и рецепты',
-    'Книги и чтение',
-    'Музыка',
-    'Финансы и инвестиции',
-    'Поставщики и бизнес',
-    'Компьютеры и техника',
-  ]
+  const [categories, setCategories] = useState([]) // Состояние для хранения категорий
+  const [loading, setLoading] = useState(true) // Состояние для отслеживания загрузки данных
+
+  useEffect(() => {
+    // Функция для получения категорий с сервера
+    const fetchCategories = async () => {
+      try {
+        const response = await fetch('http://localhost/blog/backend/api/get_categories.php') // Замените на правильный путь
+        const data = await response.json()
+
+        if (data.length > 0) {
+          setCategories(data) // Сохраняем полный список категорий с изображениями
+        } else {
+          console.error('Нет категорий')
+        }
+      } catch (error) {
+        console.error('Ошибка при получении категорий:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchCategories() // Запускаем запрос
+  }, [])
+
+  if (loading) {
+    return <div>Загрузка...</div> // Пока данные загружаются
+  }
 
   return (
     <div className="categories-container">
       {categories.map((cat) => (
         <Link
-          key={cat}
-          to={`/category/${cat}`} // Переход на страницу выбранной категории
+          key={cat.name}
+          to={`/category/${cat.name}`} // Переход на страницу выбранной категории
           className="category-button"
         >
-          {cat}
+          <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className="category-image" />
+          <span>{cat.name}</span>
         </Link>
       ))}
     </div>
