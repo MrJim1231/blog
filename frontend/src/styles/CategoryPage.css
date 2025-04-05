@@ -12,6 +12,12 @@
   background-color: #f9f9f9;
 }
 
+.article-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
 .article-image {
   width: 200px;
   height: 120px;

@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import '../styles/CategoryPage.css'
 
 const CategoryPage = () => {
-  const { category } = useParams() // category = ID категории
+  const { category } = useParams()
   const [articles, setArticles] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
@@ -36,18 +36,18 @@ const CategoryPage = () => {
     <div className="articles-container">
       <h2>Статьи</h2>
       {articles.map((article) => (
-        <div key={article.id} className="article-card">
-          <img src={`http://localhost/blog/backend/${article.image}`} alt={article.title} className="article-image" />
-          <div className="article-content">
-            <h3>
-              <Link to={`/article/${article.id}`}>{article.title}</Link>
-            </h3>
-            <p>{article.content.slice(0, 150)}...</p>
-            <p className="article-meta">
-              Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
-            </p>
+        <Link to={`/article/${article.id}`} key={article.id} className="article-card-link">
+          <div className="article-card">
+            <img src={`http://localhost/blog/backend/${article.image}`} alt={article.title} className="article-image" />
+            <div className="article-content">
+              <h3>{article.title}</h3>
+              <p>{article.content.slice(0, 150)}...</p>
+              <p className="article-meta">
+                Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
+              </p>
+            </div>
           </div>
-        </div>
+        </Link>
       ))}
     </div>
   )
