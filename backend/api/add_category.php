@@ -55,9 +55,10 @@ if ($count > 0) {
 // Обрабатываем изображение (если оно было загружено)
 $imagePath = null;
 if ($image && $image['error'] === UPLOAD_ERR_OK) {
+    // Директория для загрузки изображений
     $uploadDir = __DIR__ . '/../uploads/';
     $imageName = basename($image['name']);
-    $imagePath = $uploadDir . $imageName;
+    $imagePath = 'uploads/' . $imageName; // Путь для базы данных будет относительным
 
     // Проверяем тип файла (например, разрешаем только изображения PNG и JPG)
     $allowedTypes = ['image/jpeg', 'image/png'];
@@ -73,7 +74,7 @@ if ($image && $image['error'] === UPLOAD_ERR_OK) {
     }
 
     // Перемещаем файл в нужную папку
-    if (!move_uploaded_file($image['tmp_name'], $imagePath)) {
+    if (!move_uploaded_file($image['tmp_name'], $uploadDir . $imageName)) {
         echo json_encode(['message' => 'Ошибка при загрузке изображения']);
         exit;
     }
