@@ -32,11 +32,13 @@ const ArticlePage = () => {
   if (loading) return <div>Загрузка статьи...</div>
   if (error) return <div className="error-message">{error}</div>
 
-  // Преобразование контента: замена base64-encoded изображений на реальные пути к изображениям
-  const contentWithImages = article?.content.replace(/<img[^>]+src="([^"]+)"/g, (match, p1) => {
-    const baseUrl = 'http://localhost/blog/backend/'
-    return match.replace(p1, baseUrl + p1) // Обновляем src с базовым URL
-  })
+  // Преобразование контента: замена src и добавление класса к <img>
+  const contentWithImages = article?.content
+    .replace(/<img[^>]+src="([^"]+)"/g, (match, p1) => {
+      const baseUrl = 'http://localhost/blog/backend/'
+      return match.replace(p1, baseUrl + p1)
+    })
+    .replace(/<img(?![^>]*class=)/g, '<img class="article-image"') // Добавляем класс, если его нет
 
   return (
     <div className="article-page">
@@ -45,14 +47,6 @@ const ArticlePage = () => {
         Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
       </p>
 
-      {/* Если изображения не нужны, убираем этот блок */}
-      {/* <div className="article-images">
-        {article.images && article.images.length > 0 && article.images.map((image, index) => (
-          <img key={index} src={`http://localhost/blog/backend/${image}`} alt={`article-image-${index}`} className="article-image" />
-        ))}
-      </div> */}
-
-      {/* Отображение контента с HTML-разметкой */}
       <div className="article-full-content" dangerouslySetInnerHTML={{ __html: contentWithImages }}></div>
     </div>
   )
