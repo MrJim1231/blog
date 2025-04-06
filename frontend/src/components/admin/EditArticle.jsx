@@ -27,6 +27,14 @@ const EditArticle = () => {
     content: article.content || '<p>Начните писать...</p>', // Инициализация редактора с содержимым статьи
   })
 
+  // Функция для обновления путей изображений
+  const updateImagePaths = (content) => {
+    // Заменяем относительные пути на абсолютные для отображения в редакторе
+    const updatedContent = content.replace(/src="uploads\//g, 'src="http://localhost/blog/backend/uploads/')
+    console.log('Обновлённый HTML контент:', updatedContent) // Лог для отслеживания изменений
+    return updatedContent
+  }
+
   // Загрузка статьи и категорий
   useEffect(() => {
     const fetchArticle = async () => {
@@ -37,7 +45,8 @@ const EditArticle = () => {
         if (data.id) {
           setArticle(data)
           // Устанавливаем контент статьи в редактор после загрузки данных
-          editor.commands.setContent(data.content)
+          const updatedContent = updateImagePaths(data.content) // Обновление путей изображений
+          editor.commands.setContent(updatedContent)
         } else {
           setError('Статья не найдена')
         }
@@ -70,17 +79,49 @@ const EditArticle = () => {
     }))
   }
 
+  // Проверка обязательных полей
+  const validateFields = () => {
+    if (!article.title) {
+      return 'Заголовок статьи обязателен'
+    }
+    if (!article.content) {
+      return 'Контент статьи обязателен'
+    }
+    if (!article.category_id) {
+      return 'Категория обязательна'
+    }
+    if (!article.category_name) {
+      return 'Имя категории обязательно'
+    }
+    if (!id) {
+      return 'ID статьи обязательно'
+    }
+    return null
+  }
+
   const handleSubmit = async (e) => {
     e.preventDefault()
     setIsSubmitting(true)
 
+    // Валидация обязательных полей
+    const validationError = validateFields()
+    if (validationError) {
+      setError(validationError)
+      setIsSubmitting(false)
+      return
+    }
+
     const content = editor.getHTML()
+
+    // Оставляем относительные пути для сохранения в базе данных
+    const relativeContent = content.replace(/src="http:\/\/localhost\/blog\/backend\/uploads\//g, 'src="uploads/')
+
     const selectedCategory = categories.find((cat) => cat.id.toString() === article.category_id)
 
     const updatedArticle = {
       id,
       title: article.title,
-      content,
+      content: relativeContent, // Сохраняем относительные пути
       category_id: article.category_id,
       category_name: selectedCategory ? selectedCategory.name : '',
       images: article.images,
