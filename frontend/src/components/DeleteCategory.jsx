@@ -14,16 +14,14 @@ const DeleteCategory = ({ categoryId, onDelete }) => {
           method: 'GET',
         })
 
-        const data = await response.json()
-
-        if (data.message === 'Категория удалена') {
+        if (response.ok) {
           onDelete(categoryId) // Вызов функции удаления категории из списка
-          alert('Категория успешно удалена')
+          // Обновляем состояние без вывода alert
         } else {
-          setError(data.message) // Если ошибка, показываем её
+          setError('Ошибка при удалении категории') // Если ошибка, показываем её
         }
       } catch (error) {
-        setError('Ошибка при удалении категории')
+        setError('Ошибка при удалении категории') // Если ошибка при запросе
       } finally {
         setLoading(false)
       }

@@ -13,7 +13,7 @@ $id = $_GET['id'] ?? null;
 
 // Проверяем, был ли передан id
 if (!$id) {
-    echo json_encode(['message' => 'ID категории не передан']);
+    http_response_code(400); // Если ID не передан, отправляем ошибку 400
     exit;
 }
 
@@ -25,7 +25,7 @@ try {
 
     // Если категория не найдена
     if (!$category) {
-        echo json_encode(['message' => 'Категория не найдена']);
+        http_response_code(404); // Если категория не найдена, отправляем ошибку 404
         exit;
     }
 
@@ -41,13 +41,9 @@ try {
     $stmt = $pdo->prepare("DELETE FROM categories WHERE id = :id");
     $stmt->execute(['id' => $id]);
 
-    // Проверяем, была ли удалена категория
-    if ($stmt->rowCount() > 0) {
-        echo json_encode(['message' => 'Категория и изображение успешно удалены']);
-    } else {
-        echo json_encode(['message' => 'Категория не найдена']);
-    }
+    // После удаления категории, просто завершаем запрос, не отправляем сообщений
 } catch (PDOException $e) {
-    echo json_encode(['message' => 'Ошибка при удалении категории: ' . $e->getMessage()]);
+    http_response_code(500); // Ошибка при удалении
+    exit;
 }
 ?>
