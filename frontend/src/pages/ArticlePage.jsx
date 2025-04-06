@@ -44,13 +44,14 @@ const ArticlePage = () => {
       <p className="article-meta">
         Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
       </p>
-      {article.images && article.images.length > 0 && (
-        <div className="article-images">
-          {article.images.map((image, index) => (
-            <img key={index} src={`http://localhost/blog/backend/${image}`} alt={`article-image-${index}`} className="article-image" />
-          ))}
-        </div>
-      )}
+
+      {/* Если изображения не нужны, убираем этот блок */}
+      {/* <div className="article-images">
+        {article.images && article.images.length > 0 && article.images.map((image, index) => (
+          <img key={index} src={`http://localhost/blog/backend/${image}`} alt={`article-image-${index}`} className="article-image" />
+        ))}
+      </div> */}
+
       {/* Отображение контента с HTML-разметкой */}
       <div className="article-full-content" dangerouslySetInnerHTML={{ __html: contentWithImages }}></div>
     </div>

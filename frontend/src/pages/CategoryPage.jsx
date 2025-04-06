@@ -32,12 +32,9 @@ const CategoryPage = () => {
   if (loading) return <div>Загрузка статей...</div>
   if (error) return <div className="error-message">{error}</div>
 
-  // Преобразование контента: замена base64-encoded изображений на реальные пути к изображениям
-  const updateContentWithImages = (content) => {
-    return content.replace(/<img[^>]+src="([^"]+)"/g, (match, p1) => {
-      const baseUrl = 'http://localhost/blog/backend/'
-      return match.replace(p1, baseUrl + p1) // Обновляем src с базовым URL
-    })
+  // Преобразование контента: удаляем теги <img> из контента
+  const removeImagesFromContent = (content) => {
+    return content.replace(/<img[^>]*>/g, '') // Удаляем все теги <img>
   }
 
   return (
@@ -55,8 +52,8 @@ const CategoryPage = () => {
             )}
             <div className="article-content">
               <h3>{article.title}</h3>
-              {/* Отображение контента с HTML-разметкой */}
-              <p dangerouslySetInnerHTML={{ __html: updateContentWithImages(article.content.slice(0, 150)) }} />
+              {/* Отображаем контент, но без картинок */}
+              <p dangerouslySetInnerHTML={{ __html: removeImagesFromContent(article.content.slice(0, 150)) }} />
               <p className="article-meta">
                 Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
               </p>
