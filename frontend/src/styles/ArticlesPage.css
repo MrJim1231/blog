@@ -39,3 +39,42 @@
   color: red;
   padding: 20px;
 }
+
+/* Стили для действий (кнопок) статьи */
+.article-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+/* Стили для кнопки редактирования */
+.edit-article-button {
+  padding: 8px 15px;
+  background-color: #4caf50;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.edit-article-button:hover {
+  background-color: #45a049;
+}
+
+/* Стили для кнопки удаления */
+.delete-article-button {
+  padding: 8px 15px;
+  background-color: #f44336;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.delete-article-button:hover {
+  background-color: #e53935;
+}

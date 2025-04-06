@@ -70,7 +70,16 @@ const ArticlesPage = () => {
               </div>
             </div>
           </Link>
-          <DeleteArticle articleId={article.id} onDelete={handleDeleteArticle} />
+
+          <div className="article-actions">
+            {/* Кнопка редактирования статьи */}
+            <Link to={`/edit-article/${article.id}`} className="edit-article-button">
+              Редактировать
+            </Link>
+
+            {/* Кнопка удаления статьи */}
+            <DeleteArticle articleId={article.id} onDelete={handleDeleteArticle} />
+          </div>
         </div>
       ))}
     </div>
