@@ -1,6 +1,6 @@
 import { useParams, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import DeleteArticle from '../components/admin/DeleteArticle' // Импортируем новый компонент
+import DeleteArticle from '../components/admin/DeleteArticle'
 import '../styles/ArticlesPage.css'
 
 const ArticlesPage = () => {
@@ -30,18 +30,28 @@ const ArticlesPage = () => {
     fetchArticles()
   }, [category])
 
-  // Функция для обновления списка статей после удаления
   const handleDeleteArticle = (id) => {
-    setArticles((prevArticles) => prevArticles.filter((article) => article.id !== id)) // Удаляем статью из состояния
+    setArticles((prevArticles) => prevArticles.filter((article) => article.id !== id))
+  }
+
+  // Удаляем все <img> теги из HTML
+  const removeImagesFromContent = (content) => {
+    return content.replace(/<img[^>]*>/g, '')
+  }
+
+  // Извлекаем src первой картинки из content и добавляем базовый URL
+  const getFirstImageFromContent = (content) => {
+    const match = content.match(/<img[^>]+src="([^">]+)"/)
+    if (match) {
+      const imagePath = match[1]
+      // Добавляем базовый URL перед относительным путем изображения
+      return `http://localhost/blog/backend/${imagePath}`
+    }
+    return null
   }
 
   if (loading) return <div>Загрузка статей...</div>
   if (error) return <div className="error-message">{error}</div>
-
-  // Преобразование контента: удаляем теги <img> из контента
-  const removeImagesFromContent = (content) => {
-    return content.replace(/<img[^>]*>/g, '') // Удаляем все теги <img>
-  }
 
   return (
     <div className="articles-container">
@@ -50,16 +60,9 @@ const ArticlesPage = () => {
         <div key={article.id} className="article-card-container">
           <Link to={`/article/${article.id}`} className="article-card-link">
             <div className="article-card">
-              {article.images && article.images.length > 0 && (
-                <img
-                  src={`http://localhost/blog/backend/${article.images[0]}`} // Отображаем первое изображение
-                  alt={article.title}
-                  className="article-image"
-                />
-              )}
+              {getFirstImageFromContent(article.content) && <img src={getFirstImageFromContent(article.content)} alt={article.title} className="article-image" />}
               <div className="article-content">
                 <h3>{article.title}</h3>
-                {/* Отображаем контент, но без картинок */}
                 <p dangerouslySetInnerHTML={{ __html: removeImagesFromContent(article.content.slice(0, 150)) }} />
                 <p className="article-meta">
                   Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
@@ -67,7 +70,6 @@ const ArticlesPage = () => {
               </div>
             </div>
           </Link>
-          {/* Используем компонент DeleteArticle для удаления статьи */}
           <DeleteArticle articleId={article.id} onDelete={handleDeleteArticle} />
         </div>
       ))}
