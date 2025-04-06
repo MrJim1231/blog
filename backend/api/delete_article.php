@@ -45,7 +45,7 @@ try {
         }
     }
 
-    // Удаляем статью из базы данных
+    // Удаляем статью из базы данных, но не касаемся категории
     $stmt = $pdo->prepare("DELETE FROM articles WHERE id = :id");
     $stmt->execute(['id' => $articleId]);
 
