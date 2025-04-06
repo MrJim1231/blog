@@ -6,7 +6,7 @@ import Image from '@tiptap/extension-image'
 import '../../styles/ArticleEditor.css'
 
 const EditArticle = () => {
-  const { id } = useParams() // Получаем ID статьи из URL
+  const { id } = useParams()
   const navigate = useNavigate()
 
   const [article, setArticle] = useState({
@@ -16,26 +16,21 @@ const EditArticle = () => {
     category_id: '',
     images: [],
   })
-  const [categories, setCategories] = useState([]) // Для списка категорий
+  const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
 
-  // Инициализация редактора с Tiptap
   const editor = useEditor({
     extensions: [StarterKit, Image],
-    content: article.content || '<p>Начните писать...</p>', // Инициализация редактора с содержимым статьи
+    content: article.content || '<p>Начните писать...</p>',
   })
 
-  // Функция для обновления путей изображений
   const updateImagePaths = (content) => {
-    // Заменяем относительные пути на абсолютные для отображения в редакторе
     const updatedContent = content.replace(/src="uploads\//g, 'src="http://localhost/blog/backend/uploads/')
-    console.log('Обновлённый HTML контент:', updatedContent) // Лог для отслеживания изменений
     return updatedContent
   }
 
-  // Загрузка статьи и категорий
   useEffect(() => {
     const fetchArticle = async () => {
       try {
@@ -44,8 +39,7 @@ const EditArticle = () => {
 
         if (data.id) {
           setArticle(data)
-          // Устанавливаем контент статьи в редактор после загрузки данных
-          const updatedContent = updateImagePaths(data.content) // Обновление путей изображений
+          const updatedContent = updateImagePaths(data.content)
           editor.commands.setContent(updatedContent)
         } else {
           setError('Статья не найдена')
@@ -69,33 +63,32 @@ const EditArticle = () => {
 
     fetchArticle()
     fetchCategories()
-  }, [id, editor]) // Повторно инициализировать редактор при изменении данных статьи
+  }, [id, editor])
 
   const handleChange = (e) => {
     const { name, value } = e.target
-    setArticle((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+
+    if (name === 'category_id') {
+      const selectedCategory = categories.find((cat) => cat.id.toString() === value)
+      setArticle((prev) => ({
+        ...prev,
+        category_id: value,
+        category_name: selectedCategory ? selectedCategory.name : '',
+      }))
+    } else {
+      setArticle((prev) => ({
+        ...prev,
+        [name]: value,
+      }))
+    }
   }
 
-  // Проверка обязательных полей
   const validateFields = () => {
-    if (!article.title) {
-      return 'Заголовок статьи обязателен'
-    }
-    if (!article.content) {
-      return 'Контент статьи обязателен'
-    }
-    if (!article.category_id) {
-      return 'Категория обязательна'
-    }
-    if (!article.category_name) {
-      return 'Имя категории обязательно'
-    }
-    if (!id) {
-      return 'ID статьи обязательно'
-    }
+    if (!article.title) return 'Заголовок статьи обязателен'
+    if (!article.content) return 'Контент статьи обязателен'
+    if (!article.category_id) return 'Категория обязательна'
+    if (!article.category_name) return 'Имя категории обязательно'
+    if (!id) return 'ID статьи обязательно'
     return null
   }
 
@@ -103,7 +96,6 @@ const EditArticle = () => {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Валидация обязательных полей
     const validationError = validateFields()
     if (validationError) {
       setError(validationError)
@@ -112,18 +104,14 @@ const EditArticle = () => {
     }
 
     const content = editor.getHTML()
-
-    // Оставляем относительные пути для сохранения в базе данных
     const relativeContent = content.replace(/src="http:\/\/localhost\/blog\/backend\/uploads\//g, 'src="uploads/')
-
-    const selectedCategory = categories.find((cat) => cat.id.toString() === article.category_id)
 
     const updatedArticle = {
       id,
       title: article.title,
-      content: relativeContent, // Сохраняем относительные пути
+      content: relativeContent,
       category_id: article.category_id,
-      category_name: selectedCategory ? selectedCategory.name : '',
+      category_name: article.category_name,
       images: article.images,
     }
 
@@ -138,7 +126,7 @@ const EditArticle = () => {
 
       const data = await response.json()
       if (data.message === 'Статья успешно обновлена') {
-        navigate(`/article/${id}`) // Перенаправление на страницу статьи после успешного обновления
+        navigate(`/article/${id}`)
       } else {
         setError(data.message || 'Ошибка при обновлении статьи')
       }
@@ -165,7 +153,6 @@ const EditArticle = () => {
           })
           .run()
 
-        // Добавляем изображение в список
         setArticle((prev) => ({
           ...prev,
           images: [...prev.images, imgSrc],
@@ -182,10 +169,8 @@ const EditArticle = () => {
     <div className="max-w-4xl mx-auto p-6">
       <h2 className="text-2xl font-bold mb-4">Редактировать статью</h2>
 
-      {/* Заголовок */}
       <input type="text" placeholder="Заголовок статьи" name="title" value={article.title} onChange={handleChange} className="w-full px-4 py-2 mb-4 border border-gray-300 rounded" />
 
-      {/* Выбор категории */}
       <select name="category_id" value={article.category_id} onChange={handleChange} className="w-full px-4 py-2 mb-4 border border-gray-300 rounded">
         <option value="">Выберите категорию</option>
         {categories.map((cat) => (
@@ -195,7 +180,6 @@ const EditArticle = () => {
         ))}
       </select>
 
-      {/* Панель инструментов */}
       <div className="flex flex-wrap gap-2 mb-2">
         <button onClick={() => editor.chain().focus().toggleBold().run()} className="btn">
           B
@@ -218,17 +202,14 @@ const EditArticle = () => {
         <input id="image-upload" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
       </div>
 
-      {/* Редактор */}
       <div className="border rounded p-4 min-h-[200px] bg-white">
         <EditorContent editor={editor} />
       </div>
 
-      {/* Кнопка сохранения */}
       <button onClick={handleSubmit} className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded" disabled={isSubmitting}>
         {isSubmitting ? 'Сохраняем...' : 'Сохранить изменения'}
       </button>
 
-      {/* Превью */}
       <div className="mt-10">
         <h3 className="text-lg font-semibold mb-2">Превью:</h3>
         <h2 className="text-2xl font-bold">{article.title}</h2>
