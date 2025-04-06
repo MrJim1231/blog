@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import AddCategory from './admin/AddCategory'
-import AddArticle from './admin/AddArticle'
+import ArticleEditor from './admin/ArticleEditor' // ✅ добавляем импорт
 import '../styles/AdminPanel.css'
 
 const AdminPanel = () => {
@@ -9,7 +9,8 @@ const AdminPanel = () => {
   return (
     <div className="admin-panel">
       <AddCategory setMessage={setMessage} />
-      <AddArticle setMessage={setMessage} />
+      <hr className="my-6" />
+      <ArticleEditor setMessage={setMessage} /> {/* ✅ вставляем редактор статьи */}
       {message && <p className="message">{message}</p>}
     </div>
   )
