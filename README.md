@@ -16,3 +16,11 @@ FOREIGN KEY (`category_id`) REFERENCES `categories`(`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE articles ADD COLUMN category_name VARCHAR(255) NOT NULL AFTER category_id;
+
+CREATE TABLE articles (
+id INT AUTO_INCREMENT PRIMARY KEY,
+title VARCHAR(255) NOT NULL,
+content TEXT NOT NULL,
+created_at DATETIME NOT NULL
+);
+ALTER TABLE articles MODIFY content LONGTEXT;

@@ -12,13 +12,24 @@ const ArticleEditor = () => {
     content: '<p>Начните писать...</p>',
   })
 
-  // Обработчик загрузки изображения
+  // Преобразование ISO-формата в формат MySQL
+  const formatDateTime = (iso) => {
+    const date = new Date(iso)
+    const yyyy = date.getFullYear()
+    const mm = String(date.getMonth() + 1).padStart(2, '0')
+    const dd = String(date.getDate()).padStart(2, '0')
+    const hh = String(date.getHours()).padStart(2, '0')
+    const min = String(date.getMinutes()).padStart(2, '0')
+    const ss = String(date.getSeconds()).padStart(2, '0')
+    return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
+  }
+
+  // Загрузка изображения
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
       const reader = new FileReader()
       reader.onloadend = () => {
-        // Вставляем изображение с размерами 300x300
         const imgSrc = reader.result
         editor
           .chain()
@@ -34,16 +45,40 @@ const ArticleEditor = () => {
     }
   }
 
-  const handleSubmit = () => {
+  // Отправка статьи на сервер
+  const handleSubmit = async () => {
     const content = editor.getHTML()
     const article = {
       title,
       content,
-      createdAt: new Date().toISOString(),
+      createdAt: formatDateTime(new Date().toISOString()),
     }
 
-    console.log('📝 Статья:', article)
-    alert('Статья сохранена (в консоли)')
+    console.log('📦 Отправляем статью:', article)
+
+    try {
+      const response = await fetch('http://localhost/blog/backend/api/save_article.php', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(article),
+      })
+
+      const result = await response.json()
+      console.log('✅ Ответ сервера:', result)
+
+      if (response.ok) {
+        alert(result.message || 'Статья успешно сохранена')
+        setTitle('')
+        editor.commands.setContent('<p>Начните писать...</p>')
+      } else {
+        alert(result.message || 'Ошибка при сохранении статьи')
+      }
+    } catch (error) {
+      console.error('❌ Ошибка соединения:', error)
+      alert('Ошибка соединения с сервером')
+    }
   }
 
   return (
@@ -71,7 +106,6 @@ const ArticleEditor = () => {
           • Список
         </button>
 
-        {/* Кнопка для загрузки изображения */}
         <label htmlFor="image-upload" className="btn cursor-pointer">
           🖼 Вставить изображение
         </label>
