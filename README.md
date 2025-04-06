@@ -24,3 +24,6 @@ content TEXT NOT NULL,
 created_at DATETIME NOT NULL
 );
 ALTER TABLE articles MODIFY content LONGTEXT;
+
+ALTER TABLE articles
+ADD COLUMN images TEXT NULL;
