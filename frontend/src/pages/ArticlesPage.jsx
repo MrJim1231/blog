@@ -29,6 +29,31 @@ const ArticlesPage = () => {
     fetchArticles()
   }, [category])
 
+  const handleDeleteArticle = async (id) => {
+    if (window.confirm('Вы уверены, что хотите удалить эту статью?')) {
+      try {
+        const response = await fetch(`http://localhost/blog/backend/api/delete_article.php`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ id }),
+        })
+
+        const data = await response.json()
+
+        if (data.message === 'Статья удалена') {
+          setArticles(articles.filter((article) => article.id !== id)) // Удаляем статью из состояния
+          alert('Статья успешно удалена')
+        } else {
+          setError(data.message || 'Неизвестная ошибка при удалении статьи')
+        }
+      } catch (err) {
+        setError('Ошибка при удалении статьи')
+      }
+    }
+  }
+
   if (loading) return <div>Загрузка статей...</div>
   if (error) return <div className="error-message">{error}</div>
 
@@ -41,25 +66,31 @@ const ArticlesPage = () => {
     <div className="articles-container">
       <h2>Статьи</h2>
       {articles.map((article) => (
-        <Link to={`/article/${article.id}`} key={article.id} className="article-card-link">
-          <div className="article-card">
-            {article.images && article.images.length > 0 && (
-              <img
-                src={`http://localhost/blog/backend/${article.images[0]}`} // Отображаем первое изображение
-                alt={article.title}
-                className="article-image"
-              />
-            )}
-            <div className="article-content">
-              <h3>{article.title}</h3>
-              {/* Отображаем контент, но без картинок */}
-              <p dangerouslySetInnerHTML={{ __html: removeImagesFromContent(article.content.slice(0, 150)) }} />
-              <p className="article-meta">
-                Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
-              </p>
+        <div key={article.id} className="article-card-container">
+          <Link to={`/article/${article.id}`} className="article-card-link">
+            <div className="article-card">
+              {article.images && article.images.length > 0 && (
+                <img
+                  src={`http://localhost/blog/backend/${article.images[0]}`} // Отображаем первое изображение
+                  alt={article.title}
+                  className="article-image"
+                />
+              )}
+              <div className="article-content">
+                <h3>{article.title}</h3>
+                {/* Отображаем контент, но без картинок */}
+                <p dangerouslySetInnerHTML={{ __html: removeImagesFromContent(article.content.slice(0, 150)) }} />
+                <p className="article-meta">
+                  Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
+                </p>
+              </div>
             </div>
-          </div>
-        </Link>
+          </Link>
+          {/* Добавляем кнопку для удаления статьи */}
+          <button onClick={() => handleDeleteArticle(article.id)} className="delete-article-btn">
+            Удалить статью
+          </button>
+        </div>
       ))}
     </div>
   )
