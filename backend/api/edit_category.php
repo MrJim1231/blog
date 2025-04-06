@@ -35,11 +35,14 @@ try {
         exit;
     }
 
-    // Удаляем старое изображение, если оно есть
-    if (!empty($category['image'])) {
-        $oldImagePath = __DIR__ . '/../' . $category['image'];
-        if (file_exists($oldImagePath)) {
-            unlink($oldImagePath); // Удаляем старое изображение
+    // Удаляем старое изображение, если есть новое изображение
+    if ($image && $image['error'] === UPLOAD_ERR_OK) {
+        // Удаляем старое изображение, если оно есть
+        if (!empty($category['image'])) {
+            $oldImagePath = __DIR__ . '/../' . $category['image'];
+            if (file_exists($oldImagePath)) {
+                unlink($oldImagePath); // Удаляем старое изображение
+            }
         }
     }
 } catch (PDOException $e) {
