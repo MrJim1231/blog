@@ -14,7 +14,7 @@ $categoryId = $_GET['category'] ?? null;
 if ($categoryId) {
     // Запрос для получения статей по категории
     try {
-        $stmt = $pdo->prepare("SELECT a.id, a.title, a.content, a.category_id, a.image, a.created_at, c.name AS category_name
+        $stmt = $pdo->prepare("SELECT a.id, a.title, a.content, a.category_id, a.images, a.created_at, c.name AS category_name
                                FROM articles a
                                JOIN categories c ON a.category_id = c.id
                                WHERE a.category_id = :category_id
@@ -24,6 +24,23 @@ if ($categoryId) {
 
         // Если статьи найдены, отправляем их в формате JSON
         if ($articles) {
+            // Обрабатываем массив изображений и контент
+            foreach ($articles as &$article) {
+                // Преобразуем поле images из JSON-строки в массив
+                $article['images'] = json_decode($article['images'], true);
+                
+                // Обновляем изображения, чтобы они использовали полный путь
+                if ($article['images']) {
+                    foreach ($article['images'] as &$image) {
+                        $image = 'http://localhost/blog/backend/' . $image;
+                    }
+                }
+
+                // Экранируем контент для безопасного отображения в HTML
+                $article['content'] = htmlspecialchars($article['content']);
+            }
+            
+            // Отправляем статьи в формате JSON
             echo json_encode($articles);
         } else {
             echo json_encode(['message' => 'Статьи в этой категории не найдены']);
