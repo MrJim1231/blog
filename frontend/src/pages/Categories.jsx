@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
 import '../styles/Categories.css'
 import { useEffect, useState } from 'react'
-import DeleteCategory from './DeleteCategory'
-import EditCategoryModal from './EditCategoryModal'
+import DeleteCategory from '../components/DeleteCategory'
+import EditCategoryModal from '../components/EditCategoryModal'
 
 const Categories = () => {
   const [categories, setCategories] = useState([])

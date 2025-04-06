@@ -1,8 +1,8 @@
 import { useParams, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import '../styles/CategoryPage.css'
+import '../styles/ArticlesPage.css'
 
-const CategoryPage = () => {
+const ArticlesPage = () => {
   const { category } = useParams()
   const [articles, setArticles] = useState([])
   const [loading, setLoading] = useState(true)
@@ -65,4 +65,4 @@ const CategoryPage = () => {
   )
 }
 
-export default CategoryPage
+export default ArticlesPage
