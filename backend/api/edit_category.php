@@ -23,23 +23,50 @@ if (!$id || !$name) {
 
 $imagePath = null;
 
+// Получаем текущее изображение категории
+try {
+    $stmt = $pdo->prepare("SELECT image FROM categories WHERE id = :id");
+    $stmt->execute(['id' => $id]);
+    $category = $stmt->fetch(PDO::FETCH_ASSOC);
+
+    // Если категория не найдена
+    if (!$category) {
+        echo json_encode(['message' => 'Категория не найдена']);
+        exit;
+    }
+
+    // Удаляем старое изображение, если оно есть
+    if (!empty($category['image'])) {
+        $oldImagePath = __DIR__ . '/../' . $category['image'];
+        if (file_exists($oldImagePath)) {
+            unlink($oldImagePath); // Удаляем старое изображение
+        }
+    }
+} catch (PDOException $e) {
+    echo json_encode(['message' => 'Ошибка при получении категории: ' . $e->getMessage()]);
+    exit;
+}
+
 if ($image && $image['error'] === UPLOAD_ERR_OK) {
     $imageType = mime_content_type($image['tmp_name']);
-
     $allowedTypes = ['image/jpeg', 'image/png'];
+
     if (!in_array($imageType, $allowedTypes)) {
         echo json_encode(['message' => 'Недопустимый тип изображения']);
         exit;
     }
 
+    // Директория для загрузки изображений
     $uploadDir = __DIR__ . '/../uploads/';
     if (!is_dir($uploadDir)) {
         mkdir($uploadDir, 0777, true);
     }
 
+    // Генерация уникального имени файла
     $uniqueName = uniqid('img_', true) . '.webp';
     $imagePath = 'uploads/' . $uniqueName;
 
+    // Сохранение нового изображения в формате WebP
     switch ($imageType) {
         case 'image/jpeg':
             $img = imagecreatefromjpeg($image['tmp_name']);
@@ -58,6 +85,7 @@ if ($image && $image['error'] === UPLOAD_ERR_OK) {
 }
 
 try {
+    // Обновление данных категории в базе
     $query = "UPDATE categories SET name = :name";
     $params = ['name' => $name, 'id' => $id];
 
@@ -72,6 +100,8 @@ try {
     $stmt->execute($params);
 
     echo json_encode(['message' => 'Категория обновлена', 'image' => $imagePath]);
+
 } catch (PDOException $e) {
     echo json_encode(['message' => 'Ошибка: ' . $e->getMessage()]);
 }
+?>
