@@ -38,7 +38,13 @@ const CategoryPage = () => {
       {articles.map((article) => (
         <Link to={`/article/${article.id}`} key={article.id} className="article-card-link">
           <div className="article-card">
-            <img src={`http://localhost/blog/backend/${article.image}`} alt={article.title} className="article-image" />
+            {article.images && article.images.length > 0 && (
+              <img
+                src={`http://localhost/blog/backend/${article.images[0]}`} // Отображаем первое изображение
+                alt={article.title}
+                className="article-image"
+              />
+            )}
             <div className="article-content">
               <h3>{article.title}</h3>
               <p>{article.content.slice(0, 150)}...</p>

@@ -10,7 +10,6 @@ $articleId = $_GET['id'] ?? null;
 
 if ($articleId) {
     try {
-        // Запрос с измененным полем images
         $stmt = $pdo->prepare("SELECT a.id, a.title, a.content, a.category_id, a.images, a.created_at, c.name AS category_name
                                FROM articles a
                                JOIN categories c ON a.category_id = c.id
@@ -18,19 +17,9 @@ if ($articleId) {
         $stmt->execute(['id' => $articleId]);
         $article = $stmt->fetch(PDO::FETCH_ASSOC);
 
+        // Преобразуем строку изображений из базы данных в массив
         if ($article) {
-            // Обрабатываем поле images (если оно есть)
-            $article['images'] = json_decode($article['images'], true);
-            if ($article['images']) {
-                foreach ($article['images'] as &$image) {
-                    $image = 'http://localhost/blog/backend/' . $image; // Добавляем полный путь
-                }
-            }
-
-            // Экранируем контент для безопасного отображения в HTML
-            $article['content'] = htmlspecialchars($article['content']);
-
-            // Отправляем статью в формате JSON
+            $article['images'] = json_decode($article['images']); // Преобразуем JSON в массив
             echo json_encode($article);
         } else {
             echo json_encode(['message' => 'Статья не найдена']);

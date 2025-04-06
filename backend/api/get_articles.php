@@ -1,5 +1,4 @@
 <?php
-// Заголовки для CORS
 header("Access-Control-Allow-Origin: *");
 header("Access-Control-Allow-Methods: GET");
 header("Access-Control-Allow-Headers: Content-Type");
@@ -24,23 +23,10 @@ if ($categoryId) {
 
         // Если статьи найдены, отправляем их в формате JSON
         if ($articles) {
-            // Обрабатываем массив изображений и контент
+            // Преобразуем строку изображений из базы данных в массив
             foreach ($articles as &$article) {
-                // Преобразуем поле images из JSON-строки в массив
-                $article['images'] = json_decode($article['images'], true);
-                
-                // Обновляем изображения, чтобы они использовали полный путь
-                if ($article['images']) {
-                    foreach ($article['images'] as &$image) {
-                        $image = 'http://localhost/blog/backend/' . $image;
-                    }
-                }
-
-                // Экранируем контент для безопасного отображения в HTML
-                $article['content'] = htmlspecialchars($article['content']);
+                $article['images'] = json_decode($article['images']); // Преобразуем JSON в массив
             }
-            
-            // Отправляем статьи в формате JSON
             echo json_encode($articles);
         } else {
             echo json_encode(['message' => 'Статьи в этой категории не найдены']);

@@ -38,8 +38,14 @@ const ArticlePage = () => {
       <p className="article-meta">
         Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
       </p>
-      <img src={`http://localhost/blog/backend/${article.image}`} alt={article.title} className="article-full-image" />
-      <div className="article-full-content">{article.content}</div>
+      {article.images && article.images.length > 0 && (
+        <div className="article-images">
+          {article.images.map((image, index) => (
+            <img key={index} src={`http://localhost/blog/backend/${image}`} alt={`article-image-${index}`} className="article-image" />
+          ))}
+        </div>
+      )}
+      <div className="article-full-content" dangerouslySetInnerHTML={{ __html: article.content }}></div>
     </div>
   )
 }
