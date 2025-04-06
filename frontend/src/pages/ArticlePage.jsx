@@ -32,6 +32,12 @@ const ArticlePage = () => {
   if (loading) return <div>Загрузка статьи...</div>
   if (error) return <div className="error-message">{error}</div>
 
+  // Преобразование контента: замена base64-encoded изображений на реальные пути к изображениям
+  const contentWithImages = article?.content.replace(/<img[^>]+src="([^"]+)"/g, (match, p1) => {
+    const baseUrl = 'http://localhost/blog/backend/'
+    return match.replace(p1, baseUrl + p1) // Обновляем src с базовым URL
+  })
+
   return (
     <div className="article-page">
       <h1>{article.title}</h1>
@@ -45,7 +51,8 @@ const ArticlePage = () => {
           ))}
         </div>
       )}
-      <div className="article-full-content" dangerouslySetInnerHTML={{ __html: article.content }}></div>
+      {/* Отображение контента с HTML-разметкой */}
+      <div className="article-full-content" dangerouslySetInnerHTML={{ __html: contentWithImages }}></div>
     </div>
   )
 }
