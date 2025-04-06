@@ -13,12 +13,14 @@ require_once __DIR__ . '/../includes/db.php';
 
 $input = json_decode(file_get_contents("php://input"), true);
 
-$title = $input['title'] ?? '';
+$title = trim($input['title'] ?? '');
 $content = $input['content'] ?? '';
 $createdAt = $input['createdAt'] ?? date('Y-m-d H:i:s');
+$categoryId = $input['category_id'] ?? '';
+$categoryName = trim($input['category_name'] ?? '');
 
-if (empty($title) || empty($content)) {
-    echo json_encode(['message' => 'Заголовок и контент обязательны']);
+if (empty($title) || empty($content) || empty($categoryId) || empty($categoryName)) {
+    echo json_encode(['message' => 'Заголовок, контент, категория и имя категории обязательны']);
     exit;
 }
 
@@ -26,9 +28,8 @@ $images = [];
 $uploadDir = __DIR__ . '/../uploads/';
 $publicPath = 'uploads/';
 
-// 1. Находим все base64 изображения в контенте
 if (preg_match_all('/<img[^>]+src="data:image\/(jpeg|png);base64,([^"]+)"[^>]*>/i', $content, $matches, PREG_SET_ORDER)) {
-    foreach ($matches as $index => $match) {
+    foreach ($matches as $match) {
         $type = $match[1];
         $base64 = $match[2];
         $imgData = base64_decode($base64);
@@ -36,7 +37,6 @@ if (preg_match_all('/<img[^>]+src="data:image\/(jpeg|png);base64,([^"]+)"[^>]*>/
         $filePath = $uploadDir . $imageName;
         $webPath = $publicPath . $imageName;
 
-        // Создание изображения
         $img = imagecreatefromstring($imgData);
         if (!$img || !imagewebp($img, $filePath)) {
             echo json_encode(['message' => 'Ошибка при сохранении изображения']);
@@ -44,20 +44,18 @@ if (preg_match_all('/<img[^>]+src="data:image\/(jpeg|png);base64,([^"]+)"[^>]*>/
         }
         imagedestroy($img);
 
-        // Добавляем путь к изображению
         $images[] = $webPath;
-
-        // Заменяем base64 в контенте
-        $newImgTag = str_replace($match[0], '<img src="' . $webPath . '" alt="Uploaded Image">', $match[0]);
-        $content = str_replace($match[0], $newImgTag, $content);
+        $content = str_replace($match[0], '<img src="' . $webPath . '" alt="Uploaded Image">', $content);
     }
 }
 
 try {
-    $stmt = $pdo->prepare("INSERT INTO articles (title, content, images, created_at) VALUES (:title, :content, :images, :created_at)");
+    $stmt = $pdo->prepare("INSERT INTO articles (title, content, category_id, category_name, images, created_at) VALUES (:title, :content, :category_id, :category_name, :images, :created_at)");
     $stmt->execute([
         'title' => $title,
         'content' => $content,
+        'category_id' => $categoryId,
+        'category_name' => $categoryName,
         'images' => json_encode($images),
         'created_at' => $createdAt,
     ]);

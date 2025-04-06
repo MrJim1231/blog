@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
@@ -6,13 +6,21 @@ import '../styles/ArticleEditor.css'
 
 const ArticleEditor = () => {
   const [title, setTitle] = useState('')
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [categories, setCategories] = useState([])
 
   const editor = useEditor({
     extensions: [StarterKit, Image],
     content: '<p>Начните писать...</p>',
   })
 
-  // Преобразование ISO-формата в формат MySQL
+  useEffect(() => {
+    fetch('http://localhost/blog/backend/api/get_categories.php')
+      .then((res) => res.json())
+      .then((data) => setCategories(data))
+      .catch((err) => console.error('Ошибка загрузки категорий:', err))
+  }, [])
+
   const formatDateTime = (iso) => {
     const date = new Date(iso)
     const yyyy = date.getFullYear()
@@ -24,7 +32,6 @@ const ArticleEditor = () => {
     return `${yyyy}-${mm}-${dd} ${hh}:${min}:${ss}`
   }
 
-  // Загрузка изображения
   const handleImageChange = (e) => {
     const file = e.target.files[0]
     if (file) {
@@ -45,16 +52,18 @@ const ArticleEditor = () => {
     }
   }
 
-  // Отправка статьи на сервер
   const handleSubmit = async () => {
     const content = editor.getHTML()
+    const selected = categories.find((cat) => cat.id.toString() === selectedCategory)
+    const category_name = selected ? selected.name : ''
+
     const article = {
       title,
       content,
+      category_id: selectedCategory,
+      category_name,
       createdAt: formatDateTime(new Date().toISOString()),
     }
-
-    console.log('📦 Отправляем статью:', article)
 
     try {
       const response = await fetch('http://localhost/blog/backend/api/save_article.php', {
@@ -71,6 +80,7 @@ const ArticleEditor = () => {
       if (response.ok) {
         alert(result.message || 'Статья успешно сохранена')
         setTitle('')
+        setSelectedCategory('')
         editor.commands.setContent('<p>Начните писать...</p>')
       } else {
         alert(result.message || 'Ошибка при сохранении статьи')
@@ -87,6 +97,16 @@ const ArticleEditor = () => {
 
       {/* Заголовок */}
       <input type="text" placeholder="Заголовок статьи" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-2 mb-4 border border-gray-300 rounded" />
+
+      {/* Выбор категории */}
+      <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="w-full px-4 py-2 mb-4 border border-gray-300 rounded">
+        <option value="">Выберите категорию</option>
+        {categories.map((cat) => (
+          <option key={cat.id} value={cat.id}>
+            {cat.name}
+          </option>
+        ))}
+      </select>
 
       {/* Панель инструментов */}
       <div className="flex flex-wrap gap-2 mb-2">
@@ -105,7 +125,6 @@ const ArticleEditor = () => {
         <button onClick={() => editor.chain().focus().toggleBulletList().run()} className="btn">
           • Список
         </button>
-
         <label htmlFor="image-upload" className="btn cursor-pointer">
           🖼 Вставить изображение
         </label>
