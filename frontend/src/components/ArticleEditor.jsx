@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
+import '../styles/ArticleEditor.css'
 
 const ArticleEditor = () => {
   const [title, setTitle] = useState('')
@@ -11,10 +12,25 @@ const ArticleEditor = () => {
     content: '<p>Начните писать...</p>',
   })
 
-  const handleImageInsert = () => {
-    const url = prompt('Введите ссылку на изображение:')
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run()
+  // Обработчик загрузки изображения
+  const handleImageChange = (e) => {
+    const file = e.target.files[0]
+    if (file) {
+      const reader = new FileReader()
+      reader.onloadend = () => {
+        // Вставляем изображение с размерами 300x300
+        const imgSrc = reader.result
+        editor
+          .chain()
+          .focus()
+          .setImage({
+            src: imgSrc,
+            alt: 'Uploaded Image',
+            style: 'width: 300px; height: 300px;',
+          })
+          .run()
+      }
+      reader.readAsDataURL(file)
     }
   }
 
@@ -54,9 +70,12 @@ const ArticleEditor = () => {
         <button onClick={() => editor.chain().focus().toggleBulletList().run()} className="btn">
           • Список
         </button>
-        <button onClick={handleImageInsert} className="btn">
+
+        {/* Кнопка для загрузки изображения */}
+        <label htmlFor="image-upload" className="btn cursor-pointer">
           🖼 Вставить изображение
-        </button>
+        </label>
+        <input id="image-upload" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
       </div>
 
       {/* Редактор */}
