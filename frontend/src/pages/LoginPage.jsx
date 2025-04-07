@@ -10,21 +10,27 @@ const LoginPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
     setError('')
+
     try {
-      const res = await fetch('http://localhost/blog/backend/api/login.php', {
+      const response = await fetch('http://localhost/blog/backend/api/login.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       })
-      const data = await res.json()
+
+      const data = await response.json()
+
       if (data.user) {
+        // сохраняем пользователя
         localStorage.setItem('user', JSON.stringify(data.user))
+        // уведомим другие вкладки (если нужно)
+        window.dispatchEvent(new Event('storage'))
         navigate('/')
       } else {
-        setError(data.message || 'Ошибка входа')
+        setError(data.message || 'Неверный логин или пароль')
       }
-    } catch (err) {
-      setError('Ошибка запроса')
+    } catch (error) {
+      setError('Ошибка запроса к серверу')
     }
   }
 
@@ -35,7 +41,11 @@ const LoginPage = () => {
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Пароль" required />
         <button type="submit">Войти</button>
-        {error && <p className="error">{error}</p>}
+        {error && (
+          <p className="error" style={{ color: 'red' }}>
+            {error}
+          </p>
+        )}
       </form>
     </div>
   )
