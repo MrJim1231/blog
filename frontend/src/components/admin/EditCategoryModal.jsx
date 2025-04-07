@@ -1,5 +1,5 @@
-// components/EditCategoryModal.jsx
 import { useState, useEffect } from 'react'
+import styles from '../../styles/EditCategoryModal.module.css'
 
 const EditCategoryModal = ({ category, onClose, onSave }) => {
   const [name, setName] = useState(category.name)
@@ -41,13 +41,19 @@ const EditCategoryModal = ({ category, onClose, onSave }) => {
 
   return (
     <>
-      <div className="modal-overlay" onClick={onClose} />
-      <div className="edit-modal">
+      <div className={styles.modalOverlay} onClick={onClose} />
+      <div className={styles.editModal}>
         <h3>Редактировать категорию</h3>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Название" />
-        <input type="file" onChange={(e) => setFile(e.target.files[0])} />
-        <button onClick={handleSubmit}>Сохранить</button>
-        <button onClick={onClose}>Отмена</button>
+        <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Название" className={styles.input} />
+        <input type="file" onChange={(e) => setFile(e.target.files[0])} className={styles.input} />
+        <div className={styles.buttonGroup}>
+          <button onClick={handleSubmit} className={styles.saveButton}>
+            Сохранить
+          </button>
+          <button onClick={onClose} className={styles.cancelButton}>
+            Отмена
+          </button>
+        </div>
       </div>
     </>
   )

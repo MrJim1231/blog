@@ -1,8 +1,8 @@
 import { Link } from 'react-router-dom'
-import '../styles/Categories.css'
 import { useEffect, useState } from 'react'
 import DeleteCategory from '../components/admin/DeleteCategory'
 import EditCategoryModal from '../components/admin/EditCategoryModal'
+import styles from '../styles/Categories.module.css'
 
 const Categories = () => {
   const [categories, setCategories] = useState([])
@@ -45,16 +45,16 @@ const Categories = () => {
   if (loading) return <div>Загрузка...</div>
 
   return (
-    <div className="categories-container">
+    <div className={styles.categoriesContainer}>
       {categories.map((cat) => (
-        <div key={cat.id} className="category-item">
-          <Link to={`/category/${cat.id}`} className="category-button">
-            <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className="category-image" />
+        <div key={cat.id} className={styles.categoryItem}>
+          <Link to={`/category/${cat.id}`} className={styles.categoryButton}>
+            <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className={styles.categoryImage} />
             <span>{cat.name}</span>
           </Link>
 
-          <div className="category-actions">
-            <button className="edit-category-button" onClick={() => handleEditClick(cat)}>
+          <div className={styles.categoryActions}>
+            <button className={styles.editCategoryButton} onClick={() => handleEditClick(cat)}>
               Редактировать
             </button>
             <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
