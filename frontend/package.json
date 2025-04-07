@@ -4,10 +4,12 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "clean": "rimraf build",
     "dev": "vite",
-    "build": "vite build",
+    "build": "npm run clean && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postbuild": "react-snap"
   },
   "dependencies": {
     "@tiptap/extension-image": "^2.11.7",
@@ -17,7 +19,8 @@
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-icons": "^5.5.0",
-    "react-router-dom": "^7.5.0"
+    "react-router-dom": "^7.5.0",
+    "react-snap": "^1.23.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.17.0",
@@ -29,6 +32,24 @@
     "eslint-plugin-react-hooks": "^5.0.0",
     "eslint-plugin-react-refresh": "^0.4.16",
     "globals": "^15.14.0",
+    "rimraf": "^5.0.0",
     "vite": "^6.0.5"
+  },
+  "reactSnap": {
+    "sourceDir": "build",
+    "inlineCss": true,
+    "puppeteerArgs": [
+      "--no-sandbox"
+    ],
+    "minifyHtml": {
+      "collapseWhitespace": true,
+      "removeComments": true
+    },
+    "routes": [
+      "/",
+      "/category",
+      "/login",
+      "/register"
+    ]
   }
 }
