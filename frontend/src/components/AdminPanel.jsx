@@ -1,17 +1,17 @@
 import { useState } from 'react'
 import AddCategory from './admin/AddCategory'
-import ArticleEditor from './admin/ArticleEditor' // ✅ добавляем импорт
-import '../styles/AdminPanel.css'
+import ArticleEditor from './admin/ArticleEditor'
+import styles from '../styles/AdminPanel.module.css' // Подключаем CSS-модуль
 
 const AdminPanel = () => {
   const [message, setMessage] = useState('')
 
   return (
-    <div className="admin-panel">
+    <div className={styles.adminPanel}>
       <AddCategory setMessage={setMessage} />
       <hr className="my-6" />
-      <ArticleEditor setMessage={setMessage} /> {/* ✅ вставляем редактор статьи */}
-      {message && <p className="message">{message}</p>}
+      <ArticleEditor setMessage={setMessage} />
+      {message && <p className={styles.message}>{message}</p>}
     </div>
   )
 }

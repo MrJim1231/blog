@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import '../../styles/ArticleEditor.css'
+import styles from '../../styles/ArticleEditor.module.css' // Импортируем CSS-модуль
 
 const ArticleEditor = () => {
   const [title, setTitle] = useState('')
@@ -92,14 +92,12 @@ const ArticleEditor = () => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Создание статьи</h2>
+    <div className={styles.editorContainer}>
+      <h2 className={styles.editorTitle}>Создание статьи</h2>
 
-      {/* Заголовок */}
-      <input type="text" placeholder="Заголовок статьи" value={title} onChange={(e) => setTitle(e.target.value)} className="w-full px-4 py-2 mb-4 border border-gray-300 rounded" />
+      <input type="text" placeholder="Заголовок статьи" value={title} onChange={(e) => setTitle(e.target.value)} className={styles.inputField} />
 
-      {/* Выбор категории */}
-      <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className="w-full px-4 py-2 mb-4 border border-gray-300 rounded">
+      <select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)} className={styles.selectCategory}>
         <option value="">Выберите категорию</option>
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
@@ -108,44 +106,40 @@ const ArticleEditor = () => {
         ))}
       </select>
 
-      {/* Панель инструментов */}
-      <div className="flex flex-wrap gap-2 mb-2">
-        <button onClick={() => editor.chain().focus().toggleBold().run()} className="btn">
+      <div className={styles.buttonGroup}>
+        <button onClick={() => editor.chain().focus().toggleBold().run()} className={styles.button}>
           B
         </button>
-        <button onClick={() => editor.chain().focus().toggleItalic().run()} className="btn">
+        <button onClick={() => editor.chain().focus().toggleItalic().run()} className={styles.button}>
           I
         </button>
-        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className="btn">
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={styles.button}>
           H1
         </button>
-        <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className="btn">
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={styles.button}>
           H2
         </button>
-        <button onClick={() => editor.chain().focus().toggleBulletList().run()} className="btn">
+        <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={styles.button}>
           • Список
         </button>
-        <label htmlFor="image-upload" className="btn cursor-pointer">
+        <label htmlFor="image-upload" className={styles.button}>
           🖼 Вставить изображение
         </label>
-        <input id="image-upload" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+        <input id="image-upload" type="file" accept="image/*" onChange={handleImageChange} className={styles.hiddenInput} />
       </div>
 
-      {/* Редактор */}
-      <div className="border rounded p-4 min-h-[200px] bg-white">
+      <div className={styles.editorContent}>
         <EditorContent editor={editor} />
       </div>
 
-      {/* Кнопка сохранения */}
-      <button onClick={handleSubmit} className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded">
+      <button onClick={handleSubmit} className={styles.saveButton}>
         Сохранить статью
       </button>
 
-      {/* Превью */}
-      <div className="mt-10">
-        <h3 className="text-lg font-semibold mb-2">Превью:</h3>
+      <div className={styles.previewSection}>
+        <h3 className={styles.previewTitle}>Превью:</h3>
         <h2 className="text-2xl font-bold">{title}</h2>
-        <div className="prose max-w-none bg-gray-100 p-4 rounded shadow mt-2" dangerouslySetInnerHTML={{ __html: editor?.getHTML() }} />
+        <div className={styles.previewContent} dangerouslySetInnerHTML={{ __html: editor?.getHTML() }} />
       </div>
     </div>
   )

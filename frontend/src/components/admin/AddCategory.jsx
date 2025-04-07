@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import styles from '../../styles/AddCategory.module.css' // Импортируем CSS-модуль
 
 const AddCategory = ({ setMessage }) => {
   const [category, setCategory] = useState('')
@@ -37,17 +38,19 @@ const AddCategory = ({ setMessage }) => {
   }
 
   return (
-    <div>
+    <div className={styles.formContainer}>
       <h2>Добавить категорию</h2>
       <form onSubmit={handleSubmit}>
-        <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Название категории" />
-        <input type="file" onChange={handleImageChange} accept="image/*" />
-        <button type="submit">Добавить</button>
+        <input type="text" value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Название категории" className={styles.input} />
+        <input type="file" onChange={handleImageChange} accept="image/*" className={styles.input} />
+        <button type="submit" className={styles.button}>
+          Добавить
+        </button>
       </form>
       {categoryImage && (
-        <div className="preview">
+        <div className={styles.preview}>
           <h4>Предпросмотр</h4>
-          <img src={categoryImage} alt="Категория" className="preview-image" />
+          <img src={categoryImage} alt="Категория" className={styles.previewImage} />
           <p>{category}</p>
         </div>
       )}

@@ -1,46 +1,49 @@
-.admin-panel {
+.formContainer {
   padding: 20px;
 }
 
-input {
+.input {
   margin-bottom: 10px;
   padding: 10px;
   font-size: 16px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-button {
+.button {
   padding: 10px 20px;
   background-color: #4caf50;
   color: white;
   border: none;
   cursor: pointer;
   font-size: 16px;
+  transition: background-color 0.3s;
+  width: 100%;
 }
 
-button:hover {
+.button:hover {
   background-color: #45a049;
 }
 
-.message {
-  margin-top: 10px;
-  font-size: 16px;
-  color: #ff0000;
-}
-
-.category-preview {
+.preview {
   margin-top: 20px;
   text-align: center;
 }
 
-.preview-image {
+.previewImage {
   max-width: 200px;
   max-height: 200px;
   object-fit: cover;
   border-radius: 8px;
 }
 
-.category-preview p {
+.preview p {
   font-size: 18px;
   font-weight: bold;
+  margin-top: 10px;
+}
+
+.errorMessage {
+  color: red;
   margin-top: 10px;
 }
