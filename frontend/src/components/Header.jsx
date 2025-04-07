@@ -1,14 +1,11 @@
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import styles from '../styles/Header.module.css'
-import { useAuth } from '../context/AuthContext' // импорт контекста
+import { useAuth } from '../context/AuthContext' // Импортируем AuthContext
 
 export default function Header() {
-  const { user, logout } = useAuth()
-  const navigate = useNavigate()
-
+  const { user, logout } = useAuth() // Получаем user и logout из контекста
   const handleLogout = () => {
     logout()
-    navigate('/')
   }
 
   return (

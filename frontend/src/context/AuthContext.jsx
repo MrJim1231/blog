@@ -5,6 +5,7 @@ const AuthContext = createContext()
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
 
+  // Загружаем пользователя из localStorage при монтировании компонента
   useEffect(() => {
     const savedUser = localStorage.getItem('user')
     if (savedUser) {
@@ -15,7 +16,7 @@ export const AuthProvider = ({ children }) => {
       console.log('Пользователь не авторизован')
     }
 
-    // Обновление по событию (например, после логина)
+    // Обновляем данные пользователя, если произошли изменения в localStorage (например, после логина на другой вкладке)
     const handleStorageChange = () => {
       const updatedUser = JSON.parse(localStorage.getItem('user'))
       setUser(updatedUser)
@@ -25,6 +26,7 @@ export const AuthProvider = ({ children }) => {
     return () => window.removeEventListener('storage', handleStorageChange)
   }, [])
 
+  // Функция выхода из системы (удаляем пользователя из localStorage и сбрасываем состояние)
   const logout = () => {
     localStorage.removeItem('user')
     setUser(null)
