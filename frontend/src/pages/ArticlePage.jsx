@@ -1,6 +1,6 @@
 import { useParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-import '../styles/ArticlePage.css'
+import styles from '../styles/ArticlePage.module.css'
 
 const ArticlePage = () => {
   const { id } = useParams()
@@ -30,24 +30,22 @@ const ArticlePage = () => {
   }, [id])
 
   if (loading) return <div>Загрузка статьи...</div>
-  if (error) return <div className="error-message">{error}</div>
+  if (error) return <div className={styles.errorMessage}>{error}</div>
 
-  // Преобразование контента: замена src и добавление класса к <img>
   const contentWithImages = article?.content
     .replace(/<img[^>]+src="([^"]+)"/g, (match, p1) => {
       const baseUrl = 'http://localhost/blog/backend/'
       return match.replace(p1, baseUrl + p1)
     })
-    .replace(/<img(?![^>]*class=)/g, '<img class="article-image"') // Добавляем класс, если его нет
+    .replace(/<img(?![^>]*class=)/g, `<img class="${styles.articleImage}"`)
 
   return (
-    <div className="article-page">
+    <div className={styles.articlePage}>
       <h1>{article.title}</h1>
-      <p className="article-meta">
+      <p className={styles.articleMeta}>
         Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
       </p>
-
-      <div className="article-full-content" dangerouslySetInnerHTML={{ __html: contentWithImages }}></div>
+      <div className={styles.articleFullContent} dangerouslySetInnerHTML={{ __html: contentWithImages }}></div>
     </div>
   )
 }

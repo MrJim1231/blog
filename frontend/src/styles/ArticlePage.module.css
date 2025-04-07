@@ -1,0 +1,34 @@
+.articlePage {
+  padding: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.articleMeta {
+  font-size: 14px;
+  color: #777;
+  margin-bottom: 15px;
+}
+
+.articleFullContent {
+  font-size: 17px;
+  line-height: 1.6;
+  width: 100%;
+}
+
+.articleImage {
+  max-width: 100%;
+  height: auto;
+  width: 300px;
+  display: block;
+  margin: 10px auto;
+}
+
+.errorMessage {
+  color: red;
+  padding: 20px;
+  text-align: center;
+}
