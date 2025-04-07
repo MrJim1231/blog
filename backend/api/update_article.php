@@ -24,15 +24,20 @@ if (!$id || empty($title) || empty($content) || empty($categoryId) || empty($cat
     exit;
 }
 
-$images = [];
 $uploadDir = __DIR__ . '/../uploads/';
 $publicPath = 'uploads/';
+$images = [];
 
-if (!is_dir($uploadDir)) {
-    mkdir($uploadDir, 0777, true);
+// Получаем старые изображения
+$oldImages = [];
+$stmt = $pdo->prepare("SELECT images FROM articles WHERE id = :id");
+$stmt->execute(['id' => $id]);
+$row = $stmt->fetch(PDO::FETCH_ASSOC);
+if ($row && !empty($row['images'])) {
+    $oldImages = json_decode($row['images'], true);
 }
 
-// Обработка base64-картинок
+// Обрабатываем новые base64 изображения
 if (preg_match_all('/<img[^>]+src="data:image\/(jpeg|png);base64,([^"]+)"[^>]*>/i', $content, $matches, PREG_SET_ORDER)) {
     foreach ($matches as $match) {
         $type = $match[1];
@@ -54,6 +59,21 @@ if (preg_match_all('/<img[^>]+src="data:image\/(jpeg|png);base64,([^"]+)"[^>]*>/
     }
 }
 
+// Собираем все изображения, которые остались в content
+if (preg_match_all('/<img[^>]+src="(uploads\/[^"]+)"[^>]*>/i', $content, $existingMatches)) {
+    $images = array_unique(array_merge($images, $existingMatches[1]));
+}
+
+// Удаляем изображения, которых больше нет
+$imagesToDelete = array_diff($oldImages, $images);
+foreach ($imagesToDelete as $imgPath) {
+    $fileToDelete = __DIR__ . '/../' . $imgPath;
+    if (file_exists($fileToDelete)) {
+        unlink($fileToDelete);
+    }
+}
+
+// Обновляем статью
 try {
     $stmt = $pdo->prepare("UPDATE articles SET title = :title, content = :content, category_id = :category_id, category_name = :category_name, images = :images WHERE id = :id");
     $stmt->execute([
