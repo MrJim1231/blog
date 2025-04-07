@@ -1,21 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom'
 import styles from '../styles/Header.module.css'
-import { useEffect, useState } from 'react'
+import { useAuth } from '../context/AuthContext' // импорт контекста
 
 export default function Header() {
-  const [user, setUser] = useState(null)
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
 
-  useEffect(() => {
-    const savedUser = localStorage.getItem('user')
-    if (savedUser) {
-      setUser(JSON.parse(savedUser))
-    }
-  }, [])
-
   const handleLogout = () => {
-    localStorage.removeItem('user')
-    setUser(null)
+    logout()
     navigate('/')
   }
 

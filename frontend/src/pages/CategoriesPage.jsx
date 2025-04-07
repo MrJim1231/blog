@@ -3,11 +3,14 @@ import { useEffect, useState } from 'react'
 import DeleteCategory from '../components/admin/DeleteCategory'
 import UpdateCategory from '../components/admin/UpdateCategory'
 import styles from '../styles/CategoriesPage.module.css'
+import { useAuth } from '../context/AuthContext' // 👈 добавляем импорт
 
 const Categories = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [editingCategory, setEditingCategory] = useState(null)
+
+  const { user } = useAuth() // 👈 используем глобальный user
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -53,12 +56,14 @@ const Categories = () => {
             <div>{cat.name}</div>
           </Link>
 
-          <div className={styles.categoryActions}>
-            <button className={styles.editCategoryButton} onClick={() => handleEditClick(cat)}>
-              Редактировать
-            </button>
-            <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
-          </div>
+          {user?.role === 'admin' && (
+            <div className={styles.categoryActions}>
+              <button className={styles.editCategoryButton} onClick={() => handleEditClick(cat)}>
+                Редактировать
+              </button>
+              <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
+            </div>
+          )}
         </div>
       ))}
 
