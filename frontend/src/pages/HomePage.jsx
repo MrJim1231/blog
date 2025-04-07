@@ -1,4 +1,4 @@
-import styles from '../styles/Home.module.css' // подключаем CSS-модуль
+import styles from '../styles/HomePage.module.css' // подключаем CSS-модуль
 
 export default function Home() {
   return (

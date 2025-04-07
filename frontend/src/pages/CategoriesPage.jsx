@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import DeleteCategory from '../components/admin/DeleteCategory'
 import UpdateCategory from '../components/admin/UpdateCategory'
-import styles from '../styles/Categories.module.css'
+import styles from '../styles/CategoriesPage.module.css'
 
 const Categories = () => {
   const [categories, setCategories] = useState([])
@@ -50,7 +50,7 @@ const Categories = () => {
         <div key={cat.id} className={styles.categoryItem}>
           <Link to={`/category/${cat.id}`} className={styles.categoryButton}>
             <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className={styles.categoryImage} />
-            <span>{cat.name}</span>
+            <div>{cat.name}</div>
           </Link>
 
           <div className={styles.categoryActions}>
