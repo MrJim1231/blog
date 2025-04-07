@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import '../../styles/ArticleEditor.css'
+import styles from '../../styles/EditArticle.module.css' // Импортируем CSS-модуль
 
 const EditArticle = () => {
   const { id } = useParams()
@@ -149,7 +149,7 @@ const EditArticle = () => {
           .setImage({
             src: imgSrc,
             alt: 'Uploaded Image',
-            style: 'width: 300px; height: 300px;',
+            style: 'width: 300px; height: 300px;', // Устанавливаем размеры 300x300
           })
           .run()
 
@@ -163,15 +163,15 @@ const EditArticle = () => {
   }
 
   if (loading) return <div>Загрузка...</div>
-  if (error) return <div className="error-message">{error}</div>
+  if (error) return <div className={styles.errorMessage}>{error}</div>
 
   return (
-    <div className="max-w-4xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-4">Редактировать статью</h2>
+    <div className={styles.editorContainer}>
+      <h2 className={styles.editorTitle}>Редактировать статью</h2>
 
-      <input type="text" placeholder="Заголовок статьи" name="title" value={article.title} onChange={handleChange} className="w-full px-4 py-2 mb-4 border border-gray-300 rounded" />
+      <input type="text" placeholder="Заголовок статьи" name="title" value={article.title} onChange={handleChange} className={styles.inputField} />
 
-      <select name="category_id" value={article.category_id} onChange={handleChange} className="w-full px-4 py-2 mb-4 border border-gray-300 rounded">
+      <select name="category_id" value={article.category_id} onChange={handleChange} className={styles.selectField}>
         <option value="">Выберите категорию</option>
         {categories.map((cat) => (
           <option key={cat.id} value={cat.id}>
@@ -180,38 +180,38 @@ const EditArticle = () => {
         ))}
       </select>
 
-      <div className="flex flex-wrap gap-2 mb-2">
-        <button onClick={() => editor.chain().focus().toggleBold().run()} className="btn">
+      <div className={styles.buttonGroup}>
+        <button onClick={() => editor.chain().focus().toggleBold().run()} className={styles.button}>
           B
         </button>
-        <button onClick={() => editor.chain().focus().toggleItalic().run()} className="btn">
+        <button onClick={() => editor.chain().focus().toggleItalic().run()} className={styles.button}>
           I
         </button>
-        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className="btn">
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 1 }).run()} className={styles.button}>
           H1
         </button>
-        <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className="btn">
+        <button onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={styles.button}>
           H2
         </button>
-        <button onClick={() => editor.chain().focus().toggleBulletList().run()} className="btn">
+        <button onClick={() => editor.chain().focus().toggleBulletList().run()} className={styles.button}>
           • Список
         </button>
-        <label htmlFor="image-upload" className="btn cursor-pointer">
+        <label htmlFor="image-upload" className={styles.button}>
           🖼 Вставить изображение
         </label>
-        <input id="image-upload" type="file" accept="image/*" onChange={handleImageChange} className="hidden" />
+        <input id="image-upload" type="file" accept="image/*" onChange={handleImageChange} className={styles.hiddenInput} />
       </div>
 
-      <div className="border rounded p-4 min-h-[200px] bg-white">
+      <div className={styles.editorContent}>
         <EditorContent editor={editor} />
       </div>
 
-      <button onClick={handleSubmit} className="mt-6 bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded" disabled={isSubmitting}>
+      <button onClick={handleSubmit} className={styles.saveButton} disabled={isSubmitting}>
         {isSubmitting ? 'Сохраняем...' : 'Сохранить изменения'}
       </button>
 
-      <div className="mt-10">
-        <h3 className="text-lg font-semibold mb-2">Превью:</h3>
+      <div className={styles.previewSection}>
+        <h3 className={styles.previewTitle}>Превью:</h3>
         <h2 className="text-2xl font-bold">{article.title}</h2>
         <div className="prose max-w-none bg-gray-100 p-4 rounded shadow mt-2" dangerouslySetInnerHTML={{ __html: editor?.getHTML() }} />
       </div>

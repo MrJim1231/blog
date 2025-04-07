@@ -1,3 +1,4 @@
+/* В файле EditArticle.module.css */
 .editorContainer {
   max-width: 1200px;
   margin: 0 auto;
@@ -10,16 +11,8 @@
   margin-bottom: 16px;
 }
 
-.inputField {
-  width: 100%;
-  padding: 12px;
-  margin-bottom: 16px;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-}
-
-.selectCategory {
+.inputField,
+.selectField {
   width: 100%;
   padding: 12px;
   margin-bottom: 16px;
@@ -73,7 +66,12 @@
   cursor: pointer;
 }
 
-.saveButton:hover {
+.saveButton:disabled {
+  background-color: #9fa2a8;
+  cursor: not-allowed;
+}
+
+.saveButton:hover:not(:disabled) {
   background-color: #0056b3;
 }
 
@@ -92,6 +90,11 @@
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.errorMessage {
+  color: red;
+  font-weight: bold;
 }
 
 /* Стили для изображений в редакторе */
