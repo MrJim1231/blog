@@ -7,6 +7,8 @@ import Header from './components/Header'
 import AdminPanel from './components/AdminPanel'
 import AddArticle from './components/admin/AddArticle'
 import UpdateArticle from './components/admin/UpdateArticle'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
 import './App.css'
 
 function App() {
@@ -22,6 +24,8 @@ function App() {
           <Route path="/admin" element={<AdminPanel />} />
           <Route path="/editor" element={<AddArticle />} /> {/* <-- маршрут редактора */}
           <Route path="/edit-article/:id" element={<UpdateArticle />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
         </Routes>
       </div>
     </>
