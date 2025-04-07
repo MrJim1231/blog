@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import styles from '../../styles/ArticleEditor.module.css' // Импортируем CSS-модуль
+import styles from '../../styles/AddArticle.module.css' // Импортируем CSS-модуль
 
 const ArticleEditor = () => {
   const [title, setTitle] = useState('')

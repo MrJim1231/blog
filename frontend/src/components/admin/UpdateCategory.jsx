@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import styles from '../../styles/EditCategoryModal.module.css'
+import styles from '../../styles/UpdateCategory.module.css'
 
 const EditCategoryModal = ({ category, onClose, onSave }) => {
   const [name, setName] = useState(category.name)

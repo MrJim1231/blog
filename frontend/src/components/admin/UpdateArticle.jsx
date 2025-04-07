@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import { useEditor, EditorContent } from '@tiptap/react'
 import StarterKit from '@tiptap/starter-kit'
 import Image from '@tiptap/extension-image'
-import styles from '../../styles/EditArticle.module.css' // Импортируем CSS-модуль
+import styles from '../../styles/UpdateArticle.module.css' // Импортируем CSS-модуль
 
 const EditArticle = () => {
   const { id } = useParams()

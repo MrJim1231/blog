@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import DeleteCategory from '../components/admin/DeleteCategory'
-import EditCategoryModal from '../components/admin/EditCategoryModal'
+import UpdateCategory from '../components/admin/UpdateCategory'
 import styles from '../styles/Categories.module.css'
 
 const Categories = () => {
@@ -62,7 +62,7 @@ const Categories = () => {
         </div>
       ))}
 
-      {editingCategory && <EditCategoryModal category={editingCategory} onClose={() => setEditingCategory(null)} onSave={handleSaveEdit} />}
+      {editingCategory && <UpdateCategory category={editingCategory} onClose={() => setEditingCategory(null)} onSave={handleSaveEdit} />}
     </div>
   )
 }

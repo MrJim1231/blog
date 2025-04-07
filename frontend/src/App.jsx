@@ -5,8 +5,8 @@ import ArticlePage from './pages/ArticlePage'
 import CategoriesPage from './pages/CategoriesPage'
 import Header from './components/Header'
 import AdminPanel from './components/AdminPanel'
-import ArticleEditor from './components/admin/ArticleEditor'
-import EditArticle from './components/admin/EditArticle'
+import AddArticle from './components/admin/AddArticle'
+import UpdateArticle from './components/admin/UpdateArticle'
 import './App.css'
 
 function App() {
@@ -20,8 +20,8 @@ function App() {
           <Route path="/category/:category" element={<ArticlesPage />} />
           <Route path="/article/:id" element={<ArticlePage />} />
           <Route path="/admin" element={<AdminPanel />} />
-          <Route path="/editor" element={<ArticleEditor />} /> {/* <-- маршрут редактора */}
-          <Route path="/edit-article/:id" element={<EditArticle />} />
+          <Route path="/editor" element={<AddArticle />} /> {/* <-- маршрут редактора */}
+          <Route path="/edit-article/:id" element={<UpdateArticle />} />
         </Routes>
       </div>
     </>
