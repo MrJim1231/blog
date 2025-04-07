@@ -1,0 +1,26 @@
+.deleteButton {
+  padding: 8px 15px;
+  background-color: #f44336;
+  color: white;
+  text-decoration: none;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background-color 0.3s ease;
+}
+
+.deleteButton:hover {
+  background-color: #e53935;
+}
+
+.deleteButton:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+
+.errorMessage {
+  color: red;
+  margin-top: 8px;
+  font-size: 14px;
+}

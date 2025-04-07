@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import styles from '../../styles/DeleteArticle.module.css'
 
 const DeleteArticle = ({ articleId, onDelete }) => {
   const [loading, setLoading] = useState(false)
@@ -19,7 +20,7 @@ const DeleteArticle = ({ articleId, onDelete }) => {
         })
 
         if (response.ok) {
-          onDelete(articleId) // Вызываем onDelete, чтобы обновить состояние родительского компонента
+          onDelete(articleId)
         } else {
           const data = await response.json()
           setError(data.message || 'Неизвестная ошибка при удалении статьи')
@@ -34,10 +35,10 @@ const DeleteArticle = ({ articleId, onDelete }) => {
 
   return (
     <div>
-      <button onClick={handleDelete} disabled={loading} className="delete-article-btn">
+      <button onClick={handleDelete} disabled={loading} className={styles.deleteButton}>
         {loading ? 'Удаление...' : 'Удалить статью'}
       </button>
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
   )
 }

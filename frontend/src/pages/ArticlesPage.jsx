@@ -1,7 +1,7 @@
 import { useParams, Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import DeleteArticle from '../components/admin/DeleteArticle'
-import '../styles/ArticlesPage.css'
+import styles from '../styles/ArticlesPage.module.css'
 
 const ArticlesPage = () => {
   const { category } = useParams()
@@ -34,50 +34,44 @@ const ArticlesPage = () => {
     setArticles((prevArticles) => prevArticles.filter((article) => article.id !== id))
   }
 
-  // Удаляем все <img> теги из HTML
   const removeImagesFromContent = (content) => {
     return content.replace(/<img[^>]*>/g, '')
   }
 
-  // Извлекаем src первой картинки из content и добавляем базовый URL
   const getFirstImageFromContent = (content) => {
     const match = content.match(/<img[^>]+src="([^">]+)"/)
     if (match) {
-      const imagePath = match[1]
-      // Добавляем базовый URL перед относительным путем изображения
-      return `http://localhost/blog/backend/${imagePath}`
+      return `http://localhost/blog/backend/${match[1]}`
     }
     return null
   }
 
   if (loading) return <div>Загрузка статей...</div>
-  if (error) return <div className="error-message">{error}</div>
+  if (error) return <div className={styles.errorMessage}>{error}</div>
 
   return (
-    <div className="articles-container">
+    <div className={styles.articlesContainer}>
       <h2>Статьи</h2>
       {articles.map((article) => (
-        <div key={article.id} className="article-card-container">
-          <Link to={`/article/${article.id}`} className="article-card-link">
-            <div className="article-card">
-              {getFirstImageFromContent(article.content) && <img src={getFirstImageFromContent(article.content)} alt={article.title} className="article-image" />}
-              <div className="article-content">
+        <div key={article.id}>
+          <Link to={`/article/${article.id}`} className={styles.articleCardLink}>
+            <div className={styles.articleCard}>
+              {getFirstImageFromContent(article.content) && <img src={getFirstImageFromContent(article.content)} alt={article.title} className={styles.articleImage} />}
+              <div className={styles.articleContent}>
                 <h3>{article.title}</h3>
                 <p dangerouslySetInnerHTML={{ __html: removeImagesFromContent(article.content.slice(0, 150)) }} />
-                <p className="article-meta">
+                <p className={styles.articleMeta}>
                   Категория: {article.category_name} | Дата: {new Date(article.created_at).toLocaleDateString()}
                 </p>
               </div>
             </div>
           </Link>
 
-          <div className="article-actions">
-            {/* Кнопка редактирования статьи */}
-            <Link to={`/edit-article/${article.id}`} className="edit-article-button">
+          <div className={styles.articleActions}>
+            <Link to={`/edit-article/${article.id}`} className={styles.editArticleButton}>
               Редактировать
             </Link>
 
-            {/* Кнопка удаления статьи */}
             <DeleteArticle articleId={article.id} onDelete={handleDeleteArticle} />
           </div>
         </div>
