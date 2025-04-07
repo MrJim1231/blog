@@ -66,7 +66,7 @@ const ArticleEditor = () => {
     }
 
     try {
-      const response = await fetch('http://localhost/blog/backend/api/save_article.php', {
+      const response = await fetch('http://localhost/blog/backend/api/add_article.php', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

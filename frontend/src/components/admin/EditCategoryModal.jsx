@@ -19,7 +19,7 @@ const EditCategoryModal = ({ category, onClose, onSave }) => {
     }
 
     try {
-      const response = await fetch('http://localhost/blog/backend/api/edit_category.php', {
+      const response = await fetch('http://localhost/blog/backend/api/update_category.php', {
         method: 'POST',
         body: formData,
       })
