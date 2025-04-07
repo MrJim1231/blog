@@ -25,8 +25,12 @@ if (empty($title) || empty($content) || empty($categoryId) || empty($categoryNam
 }
 
 $images = [];
-$uploadDir = __DIR__ . '/../uploads/';
-$publicPath = 'uploads/';
+$uploadDir = __DIR__ . '/../uploads/'; // <-- ОСТАВЛЕНА папка uploads
+$publicPath = 'uploads/'; // <-- Публичный путь для базы и контента
+
+if (!is_dir($uploadDir)) {
+    mkdir($uploadDir, 0777, true);
+}
 
 if (preg_match_all('/<img[^>]+src="data:image\/(jpeg|png);base64,([^"]+)"[^>]*>/i', $content, $matches, PREG_SET_ORDER)) {
     foreach ($matches as $match) {
@@ -45,6 +49,8 @@ if (preg_match_all('/<img[^>]+src="data:image\/(jpeg|png);base64,([^"]+)"[^>]*>/
         imagedestroy($img);
 
         $images[] = $webPath;
+
+        // Заменяем base64 на путь к загруженному файлу
         $content = str_replace($match[0], '<img src="' . $webPath . '" alt="Uploaded Image">', $content);
     }
 }
@@ -53,10 +59,10 @@ try {
     $stmt = $pdo->prepare("INSERT INTO articles (title, content, category_id, category_name, images, created_at) VALUES (:title, :content, :category_id, :category_name, :images, :created_at)");
     $stmt->execute([
         'title' => $title,
-        'content' => $content,
+        'content' => $content, // <-- сюда идёт HTML с <img src="uploads/...">
         'category_id' => $categoryId,
         'category_name' => $categoryName,
-        'images' => json_encode($images),
+        'images' => json_encode($images), // <-- и список всех путей отдельно
         'created_at' => $createdAt,
     ]);
     echo json_encode(['message' => 'Статья успешно сохранена']);
