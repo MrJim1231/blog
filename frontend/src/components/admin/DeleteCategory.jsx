@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
+import styles from '../../styles/DeleteCategory.module.css' // Подключаем CSS-модуль
 
 const DeleteCategory = ({ categoryId, onDelete }) => {
-  const [loading, setLoading] = useState(false) // Для отслеживания состояния загрузки
-  const [error, setError] = useState(null) // Для отображения ошибок
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(null)
 
   const handleDelete = async () => {
     if (window.confirm('Вы уверены, что хотите удалить эту категорию?')) {
@@ -15,13 +16,12 @@ const DeleteCategory = ({ categoryId, onDelete }) => {
         })
 
         if (response.ok) {
-          onDelete(categoryId) // Вызов функции удаления категории из списка
-          // Обновляем состояние без вывода alert
+          onDelete(categoryId)
         } else {
-          setError('Ошибка при удалении категории') // Если ошибка, показываем её
+          setError('Ошибка при удалении категории')
         }
       } catch (error) {
-        setError('Ошибка при удалении категории') // Если ошибка при запросе
+        setError('Ошибка при удалении категории')
       } finally {
         setLoading(false)
       }
@@ -30,10 +30,10 @@ const DeleteCategory = ({ categoryId, onDelete }) => {
 
   return (
     <div>
-      <button onClick={handleDelete} disabled={loading}>
+      <button onClick={handleDelete} disabled={loading} className={styles.button}>
         {loading ? 'Удаление...' : 'Удалить категорию'}
       </button>
-      {error && <p className="error-message">{error}</p>}
+      {error && <p className={styles.errorMessage}>{error}</p>}
     </div>
   )
 }
