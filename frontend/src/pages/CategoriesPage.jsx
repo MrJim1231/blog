@@ -87,7 +87,12 @@ const CategoriesPage = () => {
           }}
         >
           <Link to={`/category/${cat.id}`} className={styles.categoryButton}>
-            <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className={styles.categoryImage} />
+            <img
+              src={`http://localhost/blog/backend/${cat.image}`}
+              alt={cat.name}
+              className={styles.categoryImage}
+              loading="lazy" // Добавление lazy loading для картинок
+            />
             <div>{cat.name}</div>
           </Link>
 
