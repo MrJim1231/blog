@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useState } from 'react'
 import { FaBars, FaTimes } from 'react-icons/fa'
 import styles from '../styles/Header.module.css'
@@ -7,10 +7,7 @@ import { useAuth } from '../context/AuthContext'
 export default function Header() {
   const { user, logout } = useAuth()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
-
-  const handleLogout = () => {
-    logout()
-  }
+  const navigate = useNavigate()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -20,11 +17,16 @@ export default function Header() {
     setIsMenuOpen(false)
   }
 
+  const handleLogoutClick = () => {
+    logout()
+    setIsMenuOpen(false)
+    navigate('/')
+  }
+
   return (
     <header className={styles.headerContainer}>
       <h1 className={styles.headerTitle}>Guide 💡 Life Blog</h1>
 
-      {/* Иконка бургер-меню */}
       <div className={styles.burgerIcon} onClick={toggleMenu}>
         {isMenuOpen ? <FaTimes /> : <FaBars />}
       </div>
@@ -33,75 +35,74 @@ export default function Header() {
       <nav className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`}>
         <ul>
           <li>
-            <Link to="/" className={styles.navLink} onClick={handleLinkClick}>
+            <NavLink to="/" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`} onClick={handleLinkClick}>
               Главная
-            </Link>
+            </NavLink>
           </li>
           <li>
-            <Link to="/category" className={styles.navLink} onClick={handleLinkClick}>
+            <NavLink to="/category" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`} onClick={handleLinkClick}>
               Категории
-            </Link>
+            </NavLink>
           </li>
 
           {user ? (
             <>
-              <li className={styles.navLink}>👋 {user.username}</li>
+              <li>
+                <NavLink to="#" className={styles.navLink} onClick={handleLinkClick}>
+                  👋 {user.username}
+                </NavLink>
+              </li>
               {user.role === 'admin' && (
                 <li>
-                  <Link to="/admin" className={styles.navLink} onClick={handleLinkClick}>
+                  <NavLink to="/admin" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`} onClick={handleLinkClick}>
                     Админка
-                  </Link>
+                  </NavLink>
                 </li>
               )}
               <li>
-                <button
-                  onClick={() => {
-                    handleLogout()
-                    handleLinkClick()
-                  }}
-                  className={styles.navLink}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
-                >
+                <NavLink to="#" className={styles.navLink} onClick={handleLogoutClick}>
                   Выйти
-                </button>
+                </NavLink>
               </li>
             </>
           ) : (
             <li>
-              <Link to="/auth/login" className={styles.navLink} onClick={handleLinkClick}>
+              <NavLink to="/auth/login" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`} onClick={handleLinkClick}>
                 Личный кабинет
-              </Link>
+              </NavLink>
             </li>
           )}
           <hr />
         </ul>
       </nav>
 
-      {/* Обычная навигация (для десктопа) */}
+      {/* Десктоп-меню */}
       <nav className={styles.navigationContainer}>
-        <Link to="/" className={styles.navLink}>
+        <NavLink to="/" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
           Главная
-        </Link>
-        <Link to="/category" className={styles.navLink}>
+        </NavLink>
+        <NavLink to="/category" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
           Категории
-        </Link>
+        </NavLink>
 
         {user ? (
           <>
-            <span className={styles.navLink}>👋 {user.username}</span>
+            <NavLink to="#" className={styles.navLink}>
+              👋 {user.username}
+            </NavLink>
             {user.role === 'admin' && (
-              <Link to="/admin" className={styles.navLink}>
+              <NavLink to="/admin" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
                 Админка
-              </Link>
+              </NavLink>
             )}
-            <button onClick={handleLogout} className={styles.navLink} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+            <NavLink to="#" className={styles.navLink} onClick={handleLogoutClick}>
               Выйти
-            </button>
+            </NavLink>
           </>
         ) : (
-          <Link to="/auth/login" className={styles.navLink}>
+          <NavLink to="/auth/login" className={({ isActive }) => `${styles.navLink} ${isActive ? styles.active : ''}`}>
             Личный кабинет
-          </Link>
+          </NavLink>
         )}
       </nav>
     </header>
