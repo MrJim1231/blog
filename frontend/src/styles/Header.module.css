@@ -103,6 +103,7 @@
 
   .burgerIcon {
     display: block; /* Показываем иконку бургера */
+    color: #000;
   }
 
   .navigationContainer.open {

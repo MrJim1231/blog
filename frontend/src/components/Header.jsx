@@ -16,25 +16,29 @@ export default function Header() {
     setIsMenuOpen(!isMenuOpen)
   }
 
+  const handleLinkClick = () => {
+    setIsMenuOpen(false)
+  }
+
   return (
     <header className={styles.headerContainer}>
       <h1 className={styles.headerTitle}>Guide 💡 Life Blog</h1>
 
       {/* Иконка бургер-меню */}
       <div className={styles.burgerIcon} onClick={toggleMenu}>
-        {isMenuOpen ? <FaTimes /> : <FaBars />} {/* Меняется на крестик при открытии меню */}
+        {isMenuOpen ? <FaTimes /> : <FaBars />}
       </div>
 
       {/* Мобильное меню */}
-      <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`}>
+      <nav className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`}>
         <ul>
           <li>
-            <Link to="/" className={styles.navLink}>
+            <Link to="/" className={styles.navLink} onClick={handleLinkClick}>
               Главная
             </Link>
           </li>
           <li>
-            <Link to="/category" className={styles.navLink}>
+            <Link to="/category" className={styles.navLink} onClick={handleLinkClick}>
               Категории
             </Link>
           </li>
@@ -44,27 +48,34 @@ export default function Header() {
               <li className={styles.navLink}>👋 {user.username}</li>
               {user.role === 'admin' && (
                 <li>
-                  <Link to="/admin" className={styles.navLink}>
+                  <Link to="/admin" className={styles.navLink} onClick={handleLinkClick}>
                     Админка
                   </Link>
                 </li>
               )}
               <li>
-                <button onClick={handleLogout} className={styles.navLink} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                <button
+                  onClick={() => {
+                    handleLogout()
+                    handleLinkClick()
+                  }}
+                  className={styles.navLink}
+                  style={{ background: 'none', border: 'none', cursor: 'pointer' }}
+                >
                   Выйти
                 </button>
               </li>
             </>
           ) : (
             <li>
-              <Link to="/auth/login" className={styles.navLink}>
+              <Link to="/auth/login" className={styles.navLink} onClick={handleLinkClick}>
                 Личный кабинет
               </Link>
             </li>
           )}
           <hr />
         </ul>
-      </div>
+      </nav>
 
       {/* Обычная навигация (для десктопа) */}
       <nav className={styles.navigationContainer}>
