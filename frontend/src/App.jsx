@@ -10,6 +10,7 @@ import UpdateArticle from './components/admin/UpdateArticle'
 import LoginPage from './pages/LoginPage' // Добавляем страницу логина
 import RegisterPage from './pages/RegisterPage' // Добавляем страницу регистрации
 import PrivateRoute from './components/PrivateRoute' // Импортируем PrivateRoute
+import NotFound from './pages/NotFound'
 
 import './App.css'
 
@@ -23,6 +24,7 @@ function App() {
           <Route path="/category" element={<CategoriesPage />} />
           <Route path="/category/:category" element={<ArticlesPage />} />
           <Route path="/article/:id" element={<ArticlePage />} />
+          <Route path="*" element={<NotFound />} />
 
           {/* Защищённые маршруты */}
           <Route element={<PrivateRoute role="admin" />}>
