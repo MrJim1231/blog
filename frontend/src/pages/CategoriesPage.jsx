@@ -101,6 +101,8 @@ const CategoriesPage = () => {
                 alt={cat.name}
                 className={styles.categoryImage}
                 loading="lazy" // Добавление lazy loading для картинок
+                width="300" // Укажите ширину изображения
+                height="200" // Укажите высоту изображения
               />
               <div>{cat.name}</div>
             </Link>
