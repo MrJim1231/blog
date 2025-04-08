@@ -6,7 +6,7 @@ const PrivateRoute = ({ role }) => {
   const { user } = useAuth()
 
   if (!user) {
-    return <Navigate to="/login" /> // Редиректим на логин, если нет пользователя
+    return <Navigate to="/auth/login" /> // Редиректим на логин, если нет пользователя
   }
 
   if (role && user.role !== role) {

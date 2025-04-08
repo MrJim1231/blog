@@ -54,7 +54,8 @@ const AuthPage = () => {
 
   return (
     <div className="auth-page" style={{ maxWidth: '400px', margin: '0 auto', padding: '2rem' }}>
-      <h2 style={{ textAlign: 'center' }}>Личный кабинет</h2>
+      <h2 style={{ textAlign: 'center' }}>{isLogin ? 'Вход' : 'Регистрация'}</h2>
+
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
         {!isLogin && <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Имя пользователя" required />}
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
