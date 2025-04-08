@@ -1,9 +1,10 @@
 import { Link } from 'react-router-dom'
 import styles from '../styles/Header.module.css'
-import { useAuth } from '../context/AuthContext' // Импортируем AuthContext
+import { useAuth } from '../context/AuthContext'
 
 export default function Header() {
-  const { user, logout } = useAuth() // Получаем user и logout из контекста
+  const { user, logout } = useAuth()
+
   const handleLogout = () => {
     logout()
   }
@@ -33,14 +34,9 @@ export default function Header() {
             </button>
           </>
         ) : (
-          <>
-            <Link to="/login" className={styles.navLink}>
-              Логин
-            </Link>
-            <Link to="/register" className={styles.navLink}>
-              Регистрация
-            </Link>
-          </>
+          <Link to="/auth/login" className={styles.navLink}>
+            Личный кабинет
+          </Link>
         )}
       </nav>
     </header>

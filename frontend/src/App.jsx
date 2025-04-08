@@ -7,10 +7,11 @@ import Header from './components/Header'
 import AdminPanel from './components/AdminPanel'
 import AddArticle from './components/admin/AddArticle'
 import UpdateArticle from './components/admin/UpdateArticle'
-import LoginPage from './pages/LoginPage' // Добавляем страницу логина
-import RegisterPage from './pages/RegisterPage' // Добавляем страницу регистрации
-import PrivateRoute from './components/PrivateRoute' // Импортируем PrivateRoute
+import LoginPage from './pages/LoginPage' // Страница логина
+import RegisterPage from './pages/RegisterPage' // Страница регистрации
+import PrivateRoute from './components/PrivateRoute' // Защищённый маршрут
 import NotFound from './pages/NotFound'
+import AuthPage from './pages/AuthPage' // Страница авторизации (можно объединить login и register)
 
 import './App.css'
 
@@ -30,15 +31,12 @@ function App() {
           <Route element={<PrivateRoute role="admin" />}>
             <Route path="/admin" element={<AdminPanel />} />
             <Route path="/editor" element={<AddArticle />} />
-          </Route>
-
-          <Route element={<PrivateRoute role="admin" />}>
             <Route path="/edit-article/:id" element={<UpdateArticle />} />
           </Route>
 
           {/* Страницы логина и регистрации */}
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/auth/login" element={<AuthPage />} />
+          <Route path="/auth/register" element={<AuthPage />} />
         </Routes>
       </div>
     </>
