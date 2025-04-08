@@ -25,8 +25,49 @@ export default function Header() {
         {isMenuOpen ? <FaTimes /> : <FaBars />} {/* Меняется на крестик при открытии меню */}
       </div>
 
-      {/* Навигация */}
-      <nav className={`${styles.navigationContainer} ${isMenuOpen ? styles.menuOpen : ''}`}>
+      {/* Мобильное меню */}
+      <div className={`${styles.mobileMenu} ${isMenuOpen ? styles.open : ''}`}>
+        <ul>
+          <li>
+            <Link to="/" className={styles.navLink}>
+              Главная
+            </Link>
+          </li>
+          <li>
+            <Link to="/category" className={styles.navLink}>
+              Категории
+            </Link>
+          </li>
+
+          {user ? (
+            <>
+              <li className={styles.navLink}>👋 {user.username}</li>
+              {user.role === 'admin' && (
+                <li>
+                  <Link to="/admin" className={styles.navLink}>
+                    Админка
+                  </Link>
+                </li>
+              )}
+              <li>
+                <button onClick={handleLogout} className={styles.navLink} style={{ background: 'none', border: 'none', cursor: 'pointer' }}>
+                  Выйти
+                </button>
+              </li>
+            </>
+          ) : (
+            <li>
+              <Link to="/auth/login" className={styles.navLink}>
+                Личный кабинет
+              </Link>
+            </li>
+          )}
+          <hr />
+        </ul>
+      </div>
+
+      {/* Обычная навигация (для десктопа) */}
+      <nav className={styles.navigationContainer}>
         <Link to="/" className={styles.navLink}>
           Главная
         </Link>

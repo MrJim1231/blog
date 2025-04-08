@@ -1,6 +1,7 @@
-/* Контейнер для хедера */
+/* Стили для хедера */
 .headerContainer {
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   align-items: center;
   padding: 10px 20px;
@@ -11,97 +12,104 @@
   left: 0;
   right: 0;
   z-index: 1000;
-  width: 100%;
-  box-sizing: border-box; /* Чтобы отступы не выходили за пределы */
 }
 
-/* Заголовок */
 .headerTitle {
   font-size: 32px;
   font-weight: bold;
-  flex-grow: 1; /* Логотип будет занимать оставшееся пространство */
 }
 
-/* Контейнер для навигации */
 .navigationContainer {
   display: flex;
   gap: 20px;
 }
 
-/* Ссылки навигации */
-.navLink {
-  text-decoration: none;
-  color: #333;
-  font-size: 16px;
-  font-weight: 500;
-  transition: color 0.3s ease;
-}
-
-/* Эффект при наведении на ссылку */
-.navLink:hover {
-  color: #4caf50;
-}
-
-/* Бургер-меню (скрыто по умолчанию) */
+/* Стили для бургер-меню */
 .burgerIcon {
   display: none;
+  font-size: 1.8rem;
+  color: #333;
   cursor: pointer;
-  font-size: 30px;
-  padding: 5px; /* Отступ для кнопки */
-  background-color: transparent;
-  border: none;
-  z-index: 1100; /* Обеспечиваем, что бургер-меню не перекрывается другими элементами */
+  z-index: 1101;
 }
 
-/* Адаптивность для мобильных устройств */
+.burgerIcon svg {
+  transition: transform 0.3s ease;
+}
+
+/* Мобильное меню */
+.mobileMenu {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8); /* Тёмный фон */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.3s ease-in-out;
+  z-index: 1100;
+  opacity: 0; /* Скрыто по умолчанию */
+  visibility: hidden; /* Скрыто по умолчанию */
+}
+
+.mobileMenu.open {
+  opacity: 1; /* Меню становится видимым */
+  visibility: visible;
+}
+
+.mobileMenu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.mobileMenu a {
+  color: #fff;
+  font-size: 1.2rem;
+  text-decoration: none;
+  padding: 10px;
+  transition: background 0.3s;
+}
+
+.mobileMenu a:hover {
+  background: #444;
+}
+
+/* Стили для полосы-разделителя */
+.mobileMenu hr {
+  border: 0;
+  height: 1px;
+  background-color: #444;
+  width: 80%;
+  margin: 10px 0;
+}
+
+/* Адаптивные стили для мобильных устройств */
 @media (max-width: 768px) {
-  /* Скрытие навигации на мобильных устройствах */
-  .navigationContainer {
-    display: none;
-    flex-direction: column;
-    gap: 1rem;
-    width: 100%;
-    background-color: #f4f4f4;
-    position: absolute;
-    top: 60px;
-    left: 0;
-    padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    box-sizing: border-box;
-  }
-
-  /* Когда меню открыто */
-  .menuOpen {
-    display: flex;
-  }
-
-  /* Показ бургер-меню */
-  .burgerIcon {
-    display: block;
-  }
-
-  /* Позиционирование бургер-меню справа от логотипа */
   .headerContainer {
+    display: flex;
     flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
+  }
+  .navigationContainer {
+    display: none; /* Скрываем меню на мобильных */
+  }
+
+  .burgerIcon {
+    display: block; /* Показываем иконку бургера */
+  }
+
+  .navigationContainer.open {
+    display: flex; /* Показываем меню, когда оно открыто */
   }
 
   .headerTitle {
-    flex-grow: 0; /* Логотип не будет занимать оставшееся пространство */
-  }
-
-  /* Стили для мобильных ссылок */
-  .navLink {
-    font-size: 18px;
-    padding: 10px;
-    text-align: center;
-    width: 100%;
-  }
-
-  /* Мобильное меню с иконками */
-  .navLink:hover {
-    background-color: #f4f4f4;
-    color: #4caf50;
+    font-size: 24px;
   }
 }
