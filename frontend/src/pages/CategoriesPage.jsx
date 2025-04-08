@@ -1,16 +1,17 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
+import { motion } from 'framer-motion'
 import DeleteCategory from '../components/admin/DeleteCategory'
 import UpdateCategory from '../components/admin/UpdateCategory'
 import styles from '../styles/CategoriesPage.module.css'
-import { useAuth } from '../context/AuthContext' // 👈 добавляем импорт
+import { useAuth } from '../context/AuthContext'
 
-const Categories = () => {
+const CategoriesPage = () => {
   const [categories, setCategories] = useState([])
   const [loading, setLoading] = useState(true)
   const [editingCategory, setEditingCategory] = useState(null)
 
-  const { user } = useAuth() // 👈 используем глобальный user
+  const { user } = useAuth()
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -48,9 +49,9 @@ const Categories = () => {
   if (loading) return <div>Загрузка...</div>
 
   return (
-    <div className={styles.categoriesContainer}>
-      {categories.map((cat) => (
-        <div key={cat.id} className={styles.categoryItem}>
+    <motion.div className={styles.categoriesContainer} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
+      {categories.map((cat, index) => (
+        <motion.div key={cat.id} className={styles.categoryItem} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, delay: index * 0.1 }}>
           <Link to={`/category/${cat.id}`} className={styles.categoryButton}>
             <img src={`http://localhost/blog/backend/${cat.image}`} alt={cat.name} className={styles.categoryImage} />
             <div>{cat.name}</div>
@@ -64,12 +65,12 @@ const Categories = () => {
               <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
             </div>
           )}
-        </div>
+        </motion.div>
       ))}
 
       {editingCategory && <UpdateCategory category={editingCategory} onClose={() => setEditingCategory(null)} onSave={handleSaveEdit} />}
-    </div>
+    </motion.div>
   )
 }
 
-export default Categories
+export default CategoriesPage
