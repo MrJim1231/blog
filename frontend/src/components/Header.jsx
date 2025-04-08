@@ -72,7 +72,6 @@ export default function Header() {
               </NavLink>
             </li>
           )}
-          <hr />
         </ul>
       </nav>
 
