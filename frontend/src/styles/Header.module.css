@@ -1,57 +1,71 @@
+/* Стили для хедера */
 .headerContainer {
+  background-color: #333;
+  padding: 10px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 10px 20px;
-  background-color: #f4f4f4;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  width: 100%;
   z-index: 1000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .headerTitle {
   font-size: 32px;
   font-weight: bold;
+  color: #fff;
 }
 
 .navigationContainer {
   display: flex;
   gap: 20px;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Стили для навигационных ссылок */
 .navLink {
-  display: inline-block;
-  padding: 8px 16px;
-  background-color: #007bff;
-  color: white;
   text-decoration: none;
-  border-radius: 8px;
-  transition: background-color 0.3s ease, transform 0.1s ease;
+  color: #fff;
+  font-size: 1.1rem;
+  /* font-weight: bold; */
+  padding: 8px 15px; /* Увеличиваем padding для удобства клика */
+  transition: all 0.3s ease; /* Плавный переход для всех свойств */
+  display: block; /* Убедитесь, что ссылки занимают всю ширину */
+  border-radius: 4px; /* Скругление углов */
 }
 
 .navLink:hover {
-  background-color: #0056b3;
+  background-color: #555; /* Цвет фона при наведении */
+  color: #ffd700; /* Цвет текста при наведении */
+  transform: scale(1.1); /* Увеличение элемента при наведении */
 }
 
+.navLink:focus,
 .navLink:active {
-  transform: scale(0.97);
-  background-color: #004080;
+  background-color: #333; /* Сохраняем фон нажатого элемента */
+  color: #fff; /* Цвет текста на активном элементе */
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5); /* Легкая тень при активном элементе */
 }
 
 .active {
-  background-color: #28a745;
+  background-color: #007bff; /* Цвет фона для активного пункта */
+  color: #fff;
+  padding: 8px 15px; /* Поддерживаем одинаковый padding */
+  border-radius: 4px; /* Скругление углов */
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6); /* Легкая тень для активного пункта */
 }
 
 /* Бургер-меню */
 .burgerIcon {
   display: none;
   font-size: 1.8rem;
-  color: #333;
+  color: #fff;
   cursor: pointer;
   z-index: 1101;
 }
@@ -97,12 +111,28 @@
   color: #fff;
   font-size: 1.2rem;
   text-decoration: none;
-  padding: 10px;
-  transition: background 0.3s;
+  padding: 10px 15px;
+  border-radius: 4px;
+  transition: all 0.3s;
 }
 
 .mobileMenu a:hover {
-  background: #444;
+  background: #555;
+  color: #ffd700;
+  transform: scale(1.1);
+}
+
+.mobileMenu a:focus,
+.mobileMenu a:active {
+  background: #333;
+  color: #fff;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+}
+
+.mobileMenu .active {
+  background-color: #007bff;
+  color: #fff;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6);
 }
 
 .mobileMenu hr {
@@ -125,6 +155,11 @@
 
   .burgerIcon {
     display: block;
-    color: #000;
+    color: #fff;
   }
+}
+
+/* Добавим отступ для контента страницы, чтобы не перекрывался навбар */
+body {
+  margin-top: 60px;
 }
