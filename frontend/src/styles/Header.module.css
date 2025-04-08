@@ -62,12 +62,17 @@
 }
 
 /* Бургер-меню */
+
+/* Фикс позиции бургер-иконки */
 .burgerIcon {
   display: none;
   font-size: 1.8rem;
   color: #fff;
   cursor: pointer;
   z-index: 1101;
+  position: absolute; /* Добавлено */
+  right: 55px; /* Добавлено — отступ от правого края */
+  top: 40px; /* Добавлено — выравнивание по вертикали */
 }
 
 .burgerIcon svg {
