@@ -16,7 +16,7 @@
 }
 
 .headerTitle {
-  font-size: 32px;
+  font-size: 28px;
   font-weight: bold;
   color: #fff;
 }
@@ -72,7 +72,7 @@
   z-index: 1101;
   position: absolute; /* Добавлено */
   right: 55px; /* Добавлено — отступ от правого края */
-  top: 40px; /* Добавлено — выравнивание по вертикали */
+  top: 36px; /* Добавлено — выравнивание по вертикали */
 }
 
 .burgerIcon svg {
