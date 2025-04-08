@@ -1,10 +1,11 @@
 import { Link } from 'react-router-dom'
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import DeleteCategory from '../components/admin/DeleteCategory'
 import UpdateCategory from '../components/admin/UpdateCategory'
 import styles from '../styles/CategoriesPage.module.css'
 import { useAuth } from '../context/AuthContext'
+import { Helmet } from 'react-helmet-async' // Импортируем Helmet для управления мета-тегами
 
 const CategoriesPage = () => {
   const [categories, setCategories] = useState([])
@@ -73,42 +74,51 @@ const CategoriesPage = () => {
   if (loading) return <div>Загрузка...</div>
 
   return (
-    <div className={styles.categoriesContainer}>
-      {categories.map((cat, index) => (
-        <motion.div
-          id={`category-${index}`}
-          key={cat.id}
-          className={styles.categoryItem}
-          initial={{ opacity: 0, y: 50 }}
-          animate={visibleItems.includes(index) ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }} // Анимация при попадании в область видимости
-          transition={{
-            duration: 0.5,
-            ease: 'easeOut',
-          }}
-        >
-          <Link to={`/category/${cat.id}`} className={styles.categoryButton}>
-            <img
-              src={`http://localhost/blog/backend/${cat.image}`}
-              alt={cat.name}
-              className={styles.categoryImage}
-              loading="lazy" // Добавление lazy loading для картинок
-            />
-            <div>{cat.name}</div>
-          </Link>
+    <>
+      <Helmet>
+        <meta name="description" content="Просмотрите все доступные категории на нашем сайте. Узнайте о самых популярных категориях и их контенте." />
+        <meta name="keywords" content="категории, контент, блог, категории контента" />
+        <meta name="author" content="Ваше имя" />
+        <title>Категории - Ваш сайт</title>
+      </Helmet>
 
-          {user?.role === 'admin' && (
-            <div className={styles.categoryActions}>
-              <button className={styles.editCategoryButton} onClick={() => handleEditClick(cat)}>
-                Редактировать
-              </button>
-              <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
-            </div>
-          )}
-        </motion.div>
-      ))}
+      <div className={styles.categoriesContainer}>
+        {categories.map((cat, index) => (
+          <motion.div
+            id={`category-${index}`}
+            key={cat.id}
+            className={styles.categoryItem}
+            initial={{ opacity: 0, y: 50 }}
+            animate={visibleItems.includes(index) ? { opacity: 1, y: 0 } : { opacity: 0, y: 50 }} // Анимация при попадании в область видимости
+            transition={{
+              duration: 0.5,
+              ease: 'easeOut',
+            }}
+          >
+            <Link to={`/category/${cat.id}`} className={styles.categoryButton}>
+              <img
+                src={`http://localhost/blog/backend/${cat.image}`}
+                alt={cat.name}
+                className={styles.categoryImage}
+                loading="lazy" // Добавление lazy loading для картинок
+              />
+              <div>{cat.name}</div>
+            </Link>
 
-      {editingCategory && <UpdateCategory category={editingCategory} onClose={() => setEditingCategory(null)} onSave={handleSaveEdit} />}
-    </div>
+            {user?.role === 'admin' && (
+              <div className={styles.categoryActions}>
+                <button className={styles.editCategoryButton} onClick={() => handleEditClick(cat)}>
+                  Редактировать
+                </button>
+                <DeleteCategory categoryId={cat.id} onDelete={handleDeleteCategory} />
+              </div>
+            )}
+          </motion.div>
+        ))}
+
+        {editingCategory && <UpdateCategory category={editingCategory} onClose={() => setEditingCategory(null)} onSave={handleSaveEdit} />}
+      </div>
+    </>
   )
 }
 

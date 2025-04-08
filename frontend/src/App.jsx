@@ -1,4 +1,5 @@
 import { Route, Routes } from 'react-router-dom'
+import { HelmetProvider } from 'react-helmet-async' // Импортируем HelmetProvider
 import HomePage from './pages/HomePage'
 import ArticlesPage from './pages/ArticlesPage'
 import ArticlePage from './pages/ArticlePage'
@@ -17,7 +18,9 @@ import './App.css'
 
 function App() {
   return (
-    <>
+    <HelmetProvider>
+      {' '}
+      {/* Обертываем приложение в HelmetProvider */}
       <Header />
       <div className="content">
         <Routes>
@@ -39,7 +42,7 @@ function App() {
           <Route path="/auth/register" element={<AuthPage />} />
         </Routes>
       </div>
-    </>
+    </HelmetProvider>
   )
 }
 
