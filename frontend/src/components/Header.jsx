@@ -1,19 +1,32 @@
 import { Link } from 'react-router-dom'
+import { useState } from 'react'
+import { FaBars, FaTimes } from 'react-icons/fa'
 import styles from '../styles/Header.module.css'
 import { useAuth } from '../context/AuthContext'
 
 export default function Header() {
   const { user, logout } = useAuth()
+  const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const handleLogout = () => {
     logout()
+  }
+
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen)
   }
 
   return (
     <header className={styles.headerContainer}>
       <h1 className={styles.headerTitle}>Guide 💡 Life Blog</h1>
 
-      <nav className={styles.navigationContainer}>
+      {/* Иконка бургер-меню */}
+      <div className={styles.burgerIcon} onClick={toggleMenu}>
+        {isMenuOpen ? <FaTimes /> : <FaBars />} {/* Меняется на крестик при открытии меню */}
+      </div>
+
+      {/* Навигация */}
+      <nav className={`${styles.navigationContainer} ${isMenuOpen ? styles.menuOpen : ''}`}>
         <Link to="/" className={styles.navLink}>
           Главная
         </Link>
